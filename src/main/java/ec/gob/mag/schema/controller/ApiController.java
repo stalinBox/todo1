@@ -59,7 +59,7 @@ public class ApiController implements ErrorController {
 	 */
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET)
 	@ApiOperation(value = "Obtiene todos los registros activos no eliminados logicamente", response = Officer.class)
-	public ResponseEntity<List<Officer>> findAll() {
+	public ResponseEntity<List<Officer>> findAll(@RequestHeader(name = "Authorization") String token) {
 		List<Officer> officer = officerService.findAll();
 		LOGGER.info("Find All: " + officer.toString());
 		return ResponseEntity.ok(officer);
@@ -73,7 +73,8 @@ public class ApiController implements ErrorController {
 	 */
 	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Get Officer by id", response = Officer.class)
-	public ResponseEntity<Optional<Officer>> findById(@Validated @PathVariable Long id) {
+	public ResponseEntity<Optional<Officer>> findById(@Validated @PathVariable Long id,
+			@RequestHeader(name = "Authorization") String token) {
 		Optional<Officer> officer = officerService.findById(id);
 		LOGGER.info("Find By Id: " + officer.toString());
 		return ResponseEntity.ok(officer);
@@ -113,8 +114,8 @@ public class ApiController implements ErrorController {
 	 */
 	@RequestMapping(value = "/delete/{id}/{usuId}", method = RequestMethod.POST)
 	@ApiOperation(value = "Remove officers by id")
-	public ResponseEntity<ResponseController> deleteOfficer(@Validated @PathVariable Long id,
-			@PathVariable Long usuId) {
+	public ResponseEntity<ResponseController> deleteOfficer(@Validated @PathVariable Long id, @PathVariable Long usuId,
+			@RequestHeader(name = "Authorization") String token) {
 		Officer deleteOfficer = officerService.findById(id)
 				.orElseThrow(() -> new InvalidConfigurationPropertyValueException("Officer", "Id", id.toString()));
 		deleteOfficer.setCampoEliminado(true);
@@ -132,7 +133,8 @@ public class ApiController implements ErrorController {
 	 */
 	@RequestMapping(value = "/create/", method = RequestMethod.POST)
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
-	public ResponseEntity<ResponseController> postOfficer(@Validated @RequestBody Officer officer) {
+	public ResponseEntity<ResponseController> postOfficer(@Validated @RequestBody Officer officer,
+			@RequestHeader(name = "Authorization") String token) {
 		Officer off = officerService.save(officer);
 		LOGGER.info("Officer Save: " + officer);
 		return ResponseEntity.ok(new ResponseController(off.getId(), "Creado"));
