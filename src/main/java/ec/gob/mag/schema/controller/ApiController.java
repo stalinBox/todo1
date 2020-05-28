@@ -34,8 +34,10 @@ import io.swagger.annotations.ApiResponse;
 @RequestMapping("/officer")
 @Api(value = "Rest Api example", tags = "OFFICER")
 @ApiResponses(value = { @ApiResponse(code = 200, message = "Objeto recuperado"),
-		@ApiResponse(code = 200, message = "SUCESS"), @ApiResponse(code = 404, message = "RESOURCE NOT FOUND"),
-		@ApiResponse(code = 400, message = "BAD REQUEST"), @ApiResponse(code = 201, message = "CREATED"),
+		@ApiResponse(code = 200, message = "SUCESS"), 
+		@ApiResponse(code = 404, message = "RESOURCE NOT FOUND"),
+		@ApiResponse(code = 400, message = "BAD REQUEST"), 
+		@ApiResponse(code = 201, message = "CREATED"),
 		@ApiResponse(code = 401, message = "UNAUTHORIZED"),
 		@ApiResponse(code = 415, message = "UNSUPPORTED TYPE - Representation not supported for the resource"),
 		@ApiResponse(code = 500, message = "SERVER ERROR") })
