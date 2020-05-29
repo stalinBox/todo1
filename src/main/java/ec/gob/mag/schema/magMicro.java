@@ -13,12 +13,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@EnableResourceServer
 //@SpringBootApplication
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-public class ArcapApi extends SpringBootServletInitializer {
+public class magMicro extends SpringBootServletInitializer {
 
-	private static Class<ArcapApi> applicationClass = ArcapApi.class;
+	private static Class<magMicro> applicationClass = magMicro.class;
 
 	public static void main(String[] args) {
-		SpringApplication.run(ArcapApi.class, args);
+		SpringApplication.run(magMicro.class, args);
 	}
 
 	@Override

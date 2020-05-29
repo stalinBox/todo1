@@ -39,13 +39,11 @@ import lombok.ToString;
 @ToString(of = "id")
 @EqualsAndHashCode(of = "id")
 @Builder
+
 @Data
-
 @Entity
-@Table(name = "funcionarios")
-public class Officer implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+//@Table(name = "tbl_agencia", schema = "sc_visitas")
+public class Officer {
 
 	@Id
 	@ApiModelProperty(value = "Este campo es la clave primaria de la tabla", required = true, readOnly = true)

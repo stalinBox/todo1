@@ -6,11 +6,11 @@
 
 	<groupId>ec.gob.mag</groupId>
 	<artifactId>micro_template</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
 
 	<name>ArquitecturaMicro</name>
-	<description>Template para el diseño de microservicios - DDSII</description>
+	<description>Template para el diseño de microservicios - DSII</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -69,11 +69,11 @@
 			<version>1.18.2</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 		<!--SEGURIDADES CLIENTE -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.cloud</groupId> -->
-		<!-- <artifactId>spring-cloud-starter-oauth2</artifactId> -->
-		<!-- <version>2.1.4.RELEASE</version> -->
-		<!-- </dependency> -->
+	<!-- <dependency> -->
+	<!-- <groupId>org.springframework.cloud</groupId> -->
+	<!-- <artifactId>spring-cloud-starter-oauth2</artifactId> -->
+	<!-- <version>2.1.4.RELEASE</version> -->
+	<!-- </dependency> -->
 	</dependencies>
 
 	<build>
@@ -124,6 +124,4 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
-
 </project>
