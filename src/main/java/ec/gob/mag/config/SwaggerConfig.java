@@ -1,4 +1,4 @@
-package ec.gob.mag.schema.config;
+package ec.gob.mag.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +19,7 @@ public class SwaggerConfig {
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("ec.gob.mag.schema.controller")).paths(PathSelectors.any())
-				.build();
+				.apis(RequestHandlerSelectors.basePackage("ec.gob.mag.controller")).paths(PathSelectors.any()).build();
 	}
 
 	@SuppressWarnings("unused")

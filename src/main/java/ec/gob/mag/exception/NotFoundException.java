@@ -1,4 +1,4 @@
-package ec.gob.mag.schema.exception;
+package ec.gob.mag.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

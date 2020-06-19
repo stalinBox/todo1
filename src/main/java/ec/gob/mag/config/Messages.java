@@ -1,4 +1,4 @@
-package ec.gob.mag.schema.config;
+package ec.gob.mag.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;

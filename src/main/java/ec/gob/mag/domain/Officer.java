@@ -1,4 +1,4 @@
-package ec.gob.mag.schema.domain;
+package ec.gob.mag.domain;
 
 import java.io.Serializable;
 import java.util.Date;

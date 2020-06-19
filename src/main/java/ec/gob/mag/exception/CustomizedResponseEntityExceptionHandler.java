@@ -1,4 +1,4 @@
-package ec.gob.mag.schema.exception;
+package ec.gob.mag.exception;
 
 import java.util.Date;
 import java.util.NoSuchElementException;

@@ -1,4 +1,4 @@
-package ec.gob.mag.schema.controller;
+package ec.gob.mag.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import ec.gob.mag.schema.domain.Officer;
-import ec.gob.mag.schema.services.OfficerService;
-import ec.gob.mag.schema.util.ResponseController;
+import ec.gob.mag.domain.Officer;
+import ec.gob.mag.services.OfficerService;
+import ec.gob.mag.util.ResponseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
