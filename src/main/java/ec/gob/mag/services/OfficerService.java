@@ -54,6 +54,22 @@ public class OfficerService {
 	}
 
 	/**
+	 * Busca un registro por Id
+	 * 
+	 * @param id: Identificador del registro
+	 * @return entidad: Retorna todos los registros filtrados por el parámetros de
+	 *         entrada
+	 */
+	public Officer update(Officer officer) {
+		Optional<Officer> off = findById(officer.getId());
+		if (!off.isPresent())
+			throw new NotFoundException(String.format(
+					messageSource.getMessage("error.entity_cero_exist.message", null, LocaleContextHolder.getLocale()),
+					off.get().getId()));
+		return officerRepository.save(officer);
+	}
+
+	/**
 	 * Guarda un registro
 	 * 
 	 * @param entidad: Contiene todos campos de la entidad para guardar

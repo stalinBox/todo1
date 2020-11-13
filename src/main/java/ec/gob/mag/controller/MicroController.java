@@ -12,11 +12,12 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,7 +58,7 @@ public class MicroController implements ErrorController {
 	 * @param id: Identificador de la entidad
 	 * @return Entidad: Retorna todos los registros
 	 */
-	@RequestMapping(value = "/findAll", method = RequestMethod.GET)
+	@GetMapping(value = "/findAll")
 	@ApiOperation(value = "Obtiene todos los registros activos no eliminados logicamente", response = Officer.class)
 	public ResponseEntity<List<Officer>> findAll(@RequestHeader(name = "Authorization") String token) {
 		List<Officer> officer = officerService.findAll();
@@ -71,7 +72,7 @@ public class MicroController implements ErrorController {
 	 * @param id: Identificador de la entidad
 	 * @return parametrosCarga: Retorna el registro encontrado
 	 */
-	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/findById/{id}")
 	@ApiOperation(value = "Get Officer by id", response = Officer.class)
 	public ResponseEntity<Optional<Officer>> findById(@Validated @PathVariable Long id,
 			@RequestHeader(name = "Authorization") String token) {
@@ -88,21 +89,15 @@ public class MicroController implements ErrorController {
 	 * @param entidad: entidad a actualizar
 	 * @return ResponseController: Retorna el id actualizado
 	 */
-	@RequestMapping(value = "/update/{usuId}", method = RequestMethod.POST)
+	@PostMapping(value = "/update/{usuId}")
 	@ApiOperation(value = "Actualizar los registros", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<ResponseController> update(@Valid @RequestBody Officer updateOfficer,
 			@PathVariable Long usuId, @RequestHeader(name = "Authorization") String token) {
-		Officer officer = officerService.findById(updateOfficer.getId())
-				.orElseThrow(() -> new InvalidConfigurationPropertyValueException("Officer", "Id",
-						updateOfficer.getId().toString()));
-
-		officer.setCampoActUsu(usuId);
-		// TODOS LOS CAMPOS A ACTUALIZAR
-		//
-		Officer officerUpdate = officerService.save(officer);
-		LOGGER.info("Update: " + officerUpdate);
-		return ResponseEntity.ok(new ResponseController(officerUpdate.getId(), "Actualizado"));
+		updateOfficer.setCampoActUsu(usuId);
+		Officer off = officerService.update(updateOfficer);
+		LOGGER.info("Update: " + off + " update by: " + usuId);
+		return ResponseEntity.ok(new ResponseController(off.getId(), "Actualizado"));
 	}
 
 	/**
@@ -112,7 +107,7 @@ public class MicroController implements ErrorController {
 	 * @param usuId: Identificador del usuario que va a eliminar
 	 * @return ResponseController: Retorna el id eliminado
 	 */
-	@RequestMapping(value = "/delete/{id}/{usuId}", method = RequestMethod.POST)
+	@GetMapping(value = "/delete/{id}/{usuId}")
 	@ApiOperation(value = "Remove officers by id")
 	public ResponseEntity<ResponseController> deleteOfficer(@Validated @PathVariable Long id, @PathVariable Long usuId,
 			@RequestHeader(name = "Authorization") String token) {
@@ -121,7 +116,7 @@ public class MicroController implements ErrorController {
 		deleteOfficer.setCampoEliminado(true);
 		deleteOfficer.setCampoActUsu(usuId);
 		Officer officerDel = officerService.save(deleteOfficer);
-		LOGGER.info("Delete Officer id: " + id);
+		LOGGER.info("Delete Officer id: " + id + " delete by: " + usuId);
 		return ResponseEntity.ok(new ResponseController(officerDel.getId(), "eliminado"));
 	}
 
@@ -131,7 +126,7 @@ public class MicroController implements ErrorController {
 	 * @param entidad: entidad a insertar
 	 * @return ResponseController: Retorna el id creado
 	 */
-	@RequestMapping(value = "/create/", method = RequestMethod.POST)
+	@PostMapping(value = "/create/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
 	public ResponseEntity<ResponseController> postOfficer(@Validated @RequestBody Officer officer,
 			@RequestHeader(name = "Authorization") String token) {
