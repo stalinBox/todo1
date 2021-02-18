@@ -2,17 +2,17 @@ package ec.gob.mag;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-//import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-//import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
-//@EnableResourceServer
-//@SpringBootApplication
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication
+@EnableDiscoveryClient
+@EnableEurekaClient
 public class magMicro extends SpringBootServletInitializer {
 
 	private static Class<magMicro> applicationClass = magMicro.class;

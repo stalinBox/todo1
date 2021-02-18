@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import ec.gob.mag.domain.Officer;
-import ec.gob.mag.services.OfficerService;
+import ec.gob.mag.domain.Template;
+import ec.gob.mag.services.TemplateService;
 import ec.gob.mag.util.ResponseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,21 +32,21 @@ import org.slf4j.LoggerFactory;
 import io.swagger.annotations.ApiResponse;
 
 @RestController
-@RequestMapping("/officer")
-@Api(value = "Rest Api example", tags = "OFFICER")
+@RequestMapping("/template")
+@Api(value = "Rest Api example", tags = "TEMPLATE")
 @ApiResponses(value = { @ApiResponse(code = 200, message = "Objeto recuperado"),
 		@ApiResponse(code = 200, message = "SUCESS"), @ApiResponse(code = 404, message = "RESOURCE NOT FOUND"),
 		@ApiResponse(code = 400, message = "BAD REQUEST"), @ApiResponse(code = 201, message = "CREATED"),
 		@ApiResponse(code = 401, message = "UNAUTHORIZED"),
 		@ApiResponse(code = 415, message = "UNSUPPORTED TYPE - Representation not supported for the resource"),
 		@ApiResponse(code = 500, message = "SERVER ERROR") })
-public class MicroController implements ErrorController {
+public class TemplateController implements ErrorController {
 	private static final String PATH = "/error";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MicroController.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(TemplateController.class);
 
 	@Autowired
-	@Qualifier("officerService")
-	private OfficerService officerService;
+	@Qualifier("templateService")
+	private TemplateService templateService;
 
 	@Autowired
 	@Qualifier("responseController")
@@ -56,12 +56,14 @@ public class MicroController implements ErrorController {
 	 * Busca todos los registros de la entidad
 	 * 
 	 * @param id: Identificador de la entidad
-	 * @return Entidad: Retorna todos los registros
+	 * @return Entidad: Retorna todos los registros.
+	 * @RequestHeader(name = "Authorization") String token
 	 */
 	@GetMapping(value = "/findAll")
-	@ApiOperation(value = "Obtiene todos los registros activos no eliminados logicamente", response = Officer.class)
-	public ResponseEntity<List<Officer>> findAll(@RequestHeader(name = "Authorization") String token) {
-		List<Officer> officer = officerService.findAll();
+	@ApiOperation(value = "Obtiene todos los registros activos no eliminados logicamente", response = Template.class)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<Template>> findAll() {
+		List<Template> officer = templateService.findAll();
 		LOGGER.info("Find All: " + officer.toString());
 		return ResponseEntity.ok(officer);
 	}
@@ -73,12 +75,30 @@ public class MicroController implements ErrorController {
 	 * @return parametrosCarga: Retorna el registro encontrado
 	 */
 	@GetMapping(value = "/findById/{id}")
-	@ApiOperation(value = "Get Officer by id", response = Officer.class)
-	public ResponseEntity<Optional<Officer>> findById(@Validated @PathVariable Long id,
+	@ApiOperation(value = "Get Template by id", response = Template.class)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Optional<Template>> findById(@Validated @PathVariable Long id,
 			@RequestHeader(name = "Authorization") String token) {
-		Optional<Officer> officer = officerService.findById(id);
+		Optional<Template> officer = templateService.findById(id);
 		LOGGER.info("Find By Id: " + officer.toString());
 		return ResponseEntity.ok(officer);
+	}
+
+	/**
+	 * Inserta un nuevo registro en la entidad
+	 * 
+	 * @param entidad: entidad a insertar
+	 * @return ResponseController: Retorna el id creado
+	 */
+	@PostMapping(value = "/create/{usuId}")
+	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<ResponseController> postOfficer(@Valid @PathVariable Long usuId,
+			@RequestBody Template template, @RequestHeader(name = "Authorization") String token) {
+		template.setTmpRegUsu(usuId);
+		Template off = templateService.save(template);
+		LOGGER.info("Template Save: " + template);
+		return ResponseEntity.ok(new ResponseController(off.getId(), "Creado"));
 	}
 
 	/**
@@ -92,10 +112,10 @@ public class MicroController implements ErrorController {
 	@PostMapping(value = "/update/{usuId}")
 	@ApiOperation(value = "Actualizar los registros", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> update(@Valid @RequestBody Officer updateOfficer,
+	public ResponseEntity<ResponseController> update(@Valid @RequestBody Template updateTemplate,
 			@PathVariable Long usuId, @RequestHeader(name = "Authorization") String token) {
-		updateOfficer.setCampoActUsu(usuId);
-		Officer off = officerService.update(updateOfficer);
+		updateTemplate.setTmpActUsu(usuId);
+		Template off = templateService.update(updateTemplate);
 		LOGGER.info("Update: " + off + " update by: " + usuId);
 		return ResponseEntity.ok(new ResponseController(off.getId(), "Actualizado"));
 	}
@@ -109,30 +129,16 @@ public class MicroController implements ErrorController {
 	 */
 	@GetMapping(value = "/delete/{id}/{usuId}")
 	@ApiOperation(value = "Remove officers by id")
+	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<ResponseController> deleteOfficer(@Validated @PathVariable Long id, @PathVariable Long usuId,
 			@RequestHeader(name = "Authorization") String token) {
-		Officer deleteOfficer = officerService.findById(id)
-				.orElseThrow(() -> new InvalidConfigurationPropertyValueException("Officer", "Id", id.toString()));
-		deleteOfficer.setCampoEliminado(true);
-		deleteOfficer.setCampoActUsu(usuId);
-		Officer officerDel = officerService.save(deleteOfficer);
-		LOGGER.info("Delete Officer id: " + id + " delete by: " + usuId);
+		Template deleteTemplate = templateService.findById(id)
+				.orElseThrow(() -> new InvalidConfigurationPropertyValueException("Template", "Id", id.toString()));
+		deleteTemplate.setTmpEliminado(true);
+		deleteTemplate.setTmpActUsu(usuId);
+		Template officerDel = templateService.save(deleteTemplate);
+		LOGGER.info("Delete Template id: " + id + " delete by: " + usuId);
 		return ResponseEntity.ok(new ResponseController(officerDel.getId(), "eliminado"));
-	}
-
-	/**
-	 * Inserta un nuevo registro en la entidad
-	 * 
-	 * @param entidad: entidad a insertar
-	 * @return ResponseController: Retorna el id creado
-	 */
-	@PostMapping(value = "/create/")
-	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
-	public ResponseEntity<ResponseController> postOfficer(@Validated @RequestBody Officer officer,
-			@RequestHeader(name = "Authorization") String token) {
-		Officer off = officerService.save(officer);
-		LOGGER.info("Officer Save: " + officer);
-		return ResponseEntity.ok(new ResponseController(off.getId(), "Creado"));
 	}
 
 	@Override

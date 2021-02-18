@@ -9,16 +9,16 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
-import ec.gob.mag.domain.Officer;
-import ec.gob.mag.exception.NotFoundException;
-import ec.gob.mag.repository.OfficerRepository;
+import ec.gob.mag.domain.Template;
+import ec.gob.mag.exception.MyNotFoundException;
+import ec.gob.mag.repository.TemplateRepository;
 
-@Service("officerService")
-public class OfficerService {
+@Service("templateService")
+public class TemplateService {
 
 	@Autowired
-	@Qualifier("officerRepository")
-	private OfficerRepository officerRepository;
+	@Qualifier("templateRepository")
+	private TemplateRepository templateRepository;
 
 	@Autowired
 	private MessageSource messageSource;
@@ -28,13 +28,13 @@ public class OfficerService {
 	 * 
 	 * @return Todos los registros de la tabla
 	 */
-	public List<Officer> findAll() {
-		List<Officer> officer = officerRepository.findByCampoEliminadoAndCampoEstadoEquals(false, 11);
-		if (officer.isEmpty())
-			throw new NotFoundException(String.format(
+	public List<Template> findAll() {
+		List<Template> template = templateRepository.findByTmpEliminadoAndTmpEstadoEquals(false, 11);
+		if (template.isEmpty())
+			throw new MyNotFoundException(String.format(
 					messageSource.getMessage("error.entity_cero_exist.message", null, LocaleContextHolder.getLocale()),
 					this.getClass().getName()));
-		return officer;
+		return template;
 	}
 
 	/**
@@ -44,13 +44,13 @@ public class OfficerService {
 	 * @return entidad: Retorna todos los registros filtrados por el parámetros de
 	 *         entrada
 	 */
-	public Optional<Officer> findById(Long id) {
-		Optional<Officer> officer = officerRepository.findByIdAndCampoEliminadoAndCampoEstadoEquals(id, false, 11);
-		if (!officer.isPresent())
-			throw new NotFoundException(String.format(
+	public Optional<Template> findById(Long id) {
+		Optional<Template> template = templateRepository.findByIdAndTmpEliminadoAndTmpEstadoEquals(id, false, 11);
+		if (!template.isPresent())
+			throw new MyNotFoundException(String.format(
 					messageSource.getMessage("error.entity_cero_exist.message", null, LocaleContextHolder.getLocale()),
 					id));
-		return officer;
+		return template;
 	}
 
 	/**
@@ -60,13 +60,13 @@ public class OfficerService {
 	 * @return entidad: Retorna todos los registros filtrados por el parámetros de
 	 *         entrada
 	 */
-	public Officer update(Officer officer) {
-		Optional<Officer> off = findById(officer.getId());
+	public Template update(Template template) {
+		Optional<Template> off = findById(template.getId());
 		if (!off.isPresent())
-			throw new NotFoundException(String.format(
+			throw new MyNotFoundException(String.format(
 					messageSource.getMessage("error.entity_cero_exist.message", null, LocaleContextHolder.getLocale()),
 					off.get().getId()));
-		return officerRepository.save(officer);
+		return templateRepository.save(template);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class OfficerService {
 	 * @param entidad: Contiene todos campos de la entidad para guardar
 	 * @return catalogo: La entidad Guardada
 	 */
-	public Officer save(Officer officer) {
-		return officerRepository.save(officer);
+	public Template save(Template officer) {
+		return templateRepository.save(officer);
 	}
 }
