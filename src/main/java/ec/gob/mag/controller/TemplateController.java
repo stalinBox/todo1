@@ -59,12 +59,12 @@ public class TemplateController implements ErrorController {
 	 * @return Entidad: Retorna todos los registros.
 	 * @RequestHeader(name = "Authorization") String token
 	 */
-	@GetMapping(value = "/findAll")
+	@GetMapping(value = "/findAll/{usuId}")
 	@ApiOperation(value = "Obtiene todos los registros activos no eliminados logicamente", response = Template.class)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<List<Template>> findAll() {
+	public ResponseEntity<List<Template>> findAll(@Validated @PathVariable Long usuId) {
 		List<Template> officer = templateService.findAll();
-		LOGGER.info("Find All: " + officer.toString());
+		LOGGER.info("findAll: " + officer.toString() + " usuario: " + usuId);
 		return ResponseEntity.ok(officer);
 	}
 
@@ -74,13 +74,13 @@ public class TemplateController implements ErrorController {
 	 * @param id: Identificador de la entidad
 	 * @return parametrosCarga: Retorna el registro encontrado
 	 */
-	@GetMapping(value = "/findById/{id}")
+	@GetMapping(value = "/findById/{id}/{usuId}")
 	@ApiOperation(value = "Get Template by id", response = Template.class)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Optional<Template>> findById(@Validated @PathVariable Long id,
-			@RequestHeader(name = "Authorization") String token) {
+			@Validated @PathVariable Long usuId, @RequestHeader(name = "Authorization") String token) {
 		Optional<Template> officer = templateService.findById(id);
-		LOGGER.info("Find By Id: " + officer.toString());
+		LOGGER.info("findById: " + officer.toString() + " usuario: " + usuId);
 		return ResponseEntity.ok(officer);
 	}
 
@@ -90,14 +90,13 @@ public class TemplateController implements ErrorController {
 	 * @param entidad: entidad a insertar
 	 * @return ResponseController: Retorna el id creado
 	 */
-	@PostMapping(value = "/create/{usuId}")
+	@PostMapping(value = "/create/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> postOfficer(@Valid @PathVariable Long usuId,
-			@RequestBody Template template, @RequestHeader(name = "Authorization") String token) {
-		template.setTmpRegUsu(usuId);
+	public ResponseEntity<ResponseController> postEntity(@RequestBody Template template,
+			@RequestHeader(name = "Authorization") String token) {
 		Template off = templateService.save(template);
-		LOGGER.info("Template Save: " + template);
+		LOGGER.info("Template Save: " + template + "usuario: " + template.getTmpRegUsu());
 		return ResponseEntity.ok(new ResponseController(off.getId(), "Creado"));
 	}
 
@@ -112,11 +111,11 @@ public class TemplateController implements ErrorController {
 	@PostMapping(value = "/update/{usuId}")
 	@ApiOperation(value = "Actualizar los registros", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> update(@Valid @RequestBody Template updateTemplate,
-			@PathVariable Long usuId, @RequestHeader(name = "Authorization") String token) {
-		updateTemplate.setTmpActUsu(usuId);
-		Template off = templateService.update(updateTemplate);
-		LOGGER.info("Update: " + off + " update by: " + usuId);
+	public ResponseEntity<ResponseController> update(@Valid @RequestBody Template update, @PathVariable Long usuId,
+			@RequestHeader(name = "Authorization") String token) {
+		update.setTmpActUsu(usuId);
+		Template off = templateService.update(update);
+		LOGGER.info("Update: " + off + " usuario: " + usuId);
 		return ResponseEntity.ok(new ResponseController(off.getId(), "Actualizado"));
 	}
 
@@ -137,7 +136,7 @@ public class TemplateController implements ErrorController {
 		deleteTemplate.setTmpEliminado(true);
 		deleteTemplate.setTmpActUsu(usuId);
 		Template officerDel = templateService.save(deleteTemplate);
-		LOGGER.info("Delete Template id: " + id + " delete by: " + usuId);
+		LOGGER.info("Delete: " + id + " usuario: " + usuId);
 		return ResponseEntity.ok(new ResponseController(officerDel.getId(), "eliminado"));
 	}
 

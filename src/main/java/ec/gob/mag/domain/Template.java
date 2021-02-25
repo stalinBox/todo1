@@ -28,13 +28,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(of = "id")
@@ -101,6 +97,7 @@ public class Template implements Serializable {
 	@Column(name = "tmp_reg_usu", nullable = false)
 	@JsonProperty("tmpRegUsu")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.validation_blank.message")
 	private Long tmpRegUsu;
 
 	@ApiModelProperty(value = "Fecha en la que hizo la actualización del registro", example = "")
