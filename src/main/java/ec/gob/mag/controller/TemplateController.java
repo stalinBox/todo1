@@ -3,8 +3,6 @@ package ec.gob.mag.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ec.gob.mag.domain.Template;
 import ec.gob.mag.services.TemplateService;
 import ec.gob.mag.util.ResponseController;
+import ec.gob.mag.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -52,6 +51,10 @@ public class TemplateController implements ErrorController {
 	@Qualifier("responseController")
 	private ResponseController responseController;
 
+	@Autowired
+	@Qualifier("util")
+	private Util util;
+
 	/**
 	 * Busca todos los registros de la entidad
 	 * 
@@ -59,12 +62,12 @@ public class TemplateController implements ErrorController {
 	 * @return Entidad: Retorna todos los registros.
 	 * @RequestHeader(name = "Authorization") String token
 	 */
-	@GetMapping(value = "/findAll/{usuId}")
+	@GetMapping(value = "/findAll")
 	@ApiOperation(value = "Obtiene todos los registros activos no eliminados logicamente", response = Template.class)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<List<Template>> findAll(@Validated @PathVariable Long usuId) {
+	public ResponseEntity<?> findAll(@RequestHeader(name = "Authorization") String token) {
 		List<Template> officer = templateService.findAll();
-		LOGGER.info("findAll: " + officer.toString() + " usuario: " + usuId);
+		LOGGER.info("findAll: " + officer.toString() + " usuario: " + util.filterUsuId(token));
 		return ResponseEntity.ok(officer);
 	}
 
@@ -74,13 +77,13 @@ public class TemplateController implements ErrorController {
 	 * @param id: Identificador de la entidad
 	 * @return parametrosCarga: Retorna el registro encontrado
 	 */
-	@GetMapping(value = "/findById/{id}/{usuId}")
+	@GetMapping(value = "/findById/{id}")
 	@ApiOperation(value = "Get Template by id", response = Template.class)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Optional<Template>> findById(@Validated @PathVariable Long id,
-			@Validated @PathVariable Long usuId, @RequestHeader(name = "Authorization") String token) {
+	public ResponseEntity<Optional<?>> findById(@Validated @PathVariable Long id,
+			@RequestHeader(name = "Authorization") String token) {
 		Optional<Template> officer = templateService.findById(id);
-		LOGGER.info("findById: " + officer.toString() + " usuario: " + usuId);
+		LOGGER.info("findById: " + officer.toString() + " usuario: " + util.filterUsuId(token));
 		return ResponseEntity.ok(officer);
 	}
 
@@ -96,7 +99,7 @@ public class TemplateController implements ErrorController {
 	public ResponseEntity<ResponseController> postEntity(@RequestBody Template template,
 			@RequestHeader(name = "Authorization") String token) {
 		Template off = templateService.save(template);
-		LOGGER.info("Template Save: " + template + "usuario: " + template.getTmpRegUsu());
+		LOGGER.info("Creado: " + template + " usuario: " + template.getTmpRegUsu());
 		return ResponseEntity.ok(new ResponseController(off.getId(), "Creado"));
 	}
 
@@ -111,11 +114,11 @@ public class TemplateController implements ErrorController {
 	@PostMapping(value = "/update/{usuId}")
 	@ApiOperation(value = "Actualizar los registros", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> update(@Valid @RequestBody Template update, @PathVariable Long usuId,
+	public ResponseEntity<ResponseController> update(@RequestBody Template update, @PathVariable Long usuId,
 			@RequestHeader(name = "Authorization") String token) {
 		update.setTmpActUsu(usuId);
 		Template off = templateService.update(update);
-		LOGGER.info("Update: " + off + " usuario: " + usuId);
+		LOGGER.info("Actualizado: " + off + " usuario: " + usuId);
 		return ResponseEntity.ok(new ResponseController(off.getId(), "Actualizado"));
 	}
 
@@ -127,16 +130,16 @@ public class TemplateController implements ErrorController {
 	 * @return ResponseController: Retorna el id eliminado
 	 */
 	@GetMapping(value = "/delete/{id}/{usuId}")
-	@ApiOperation(value = "Remove officers by id")
+	@ApiOperation(value = "Remove template by id")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<ResponseController> deleteOfficer(@Validated @PathVariable Long id, @PathVariable Long usuId,
+	public ResponseEntity<ResponseController> deleteOfficer(@PathVariable Long id, @PathVariable Long usuId,
 			@RequestHeader(name = "Authorization") String token) {
 		Template deleteTemplate = templateService.findById(id)
 				.orElseThrow(() -> new InvalidConfigurationPropertyValueException("Template", "Id", id.toString()));
 		deleteTemplate.setTmpEliminado(true);
 		deleteTemplate.setTmpActUsu(usuId);
 		Template officerDel = templateService.save(deleteTemplate);
-		LOGGER.info("Delete: " + id + " usuario: " + usuId);
+		LOGGER.info("Eliminado: " + id + " usuario: " + usuId);
 		return ResponseEntity.ok(new ResponseController(officerDel.getId(), "eliminado"));
 	}
 
