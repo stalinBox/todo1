@@ -67,7 +67,8 @@ public class TemplateController implements ErrorController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> findAll(@RequestHeader(name = "Authorization") String token) {
 		List<Template> officer = templateService.findAll();
-		LOGGER.info("findAll: " + officer.toString() + " usuario: " + util.filterUsuId(token));
+
+		LOGGER.info("template/findAll: " + officer.toString() + " usuario: " + util.filterUsuId(token));
 		return ResponseEntity.ok(officer);
 	}
 
@@ -96,7 +97,7 @@ public class TemplateController implements ErrorController {
 	@PostMapping(value = "/create/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> postEntity(@RequestBody Template template,
+	public ResponseEntity<ResponseController> postEntity(@Validated @RequestBody Template template,
 			@RequestHeader(name = "Authorization") String token) {
 		Template off = templateService.save(template);
 		LOGGER.info("Creado: " + template + " usuario: " + template.getTmpRegUsu());
@@ -114,7 +115,7 @@ public class TemplateController implements ErrorController {
 	@PostMapping(value = "/update/{usuId}")
 	@ApiOperation(value = "Actualizar los registros", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> update(@RequestBody Template update, @PathVariable Long usuId,
+	public ResponseEntity<ResponseController> update(@Validated @RequestBody Template update, @PathVariable Long usuId,
 			@RequestHeader(name = "Authorization") String token) {
 		update.setTmpActUsu(usuId);
 		Template off = templateService.update(update);
