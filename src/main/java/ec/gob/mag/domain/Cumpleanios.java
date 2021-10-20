@@ -5,9 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -33,100 +36,101 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(of = "id")
-@EqualsAndHashCode(of = "id")
+@ToString(of = "cumId")
+@EqualsAndHashCode(of = "cumId")
 @Builder
 
 @Data
 @Entity
-@Table(name = "tbl_template", schema = "public")
-public class Template implements Serializable {
+@Table(name = "cumpleanios", schema = "sc_noticias_mag")
+public class Cumpleanios implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@ApiModelProperty(value = "Este campo es la clave primaria de la tabla", required = true, readOnly = true)
-	@Column(name = "tmp_id")
+	@Column(name = "cum_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty("id")
-	private Long id;
+	@JsonProperty("cumId")
+	private Long cumId;
 
-	@ApiModelProperty(notes = "Provide the email of the officer", required = true)
-	@Email(message = "_error.validation_valid_mail.message")
-	@Column(name = "tmp_mail")
-	@NotBlank(message = "_error.validation_blank.message")
-	@JsonProperty("tmp_mail")
-	private String tmpMail;
-
-	@ApiModelProperty(value = "Ejemplo parametro String", example = "Cualquier string")
+	@ApiModelProperty(value = "Ejemplo parametro String", example = "Nombres Completos")
 	@Size(min = 0, max = 64, message = "_error.validation_range.message-[0, 64]")
-	@Column(name = "tmp_str")
-	@NotEmpty(message = "_error.validation_blank.message")
-	@JsonProperty("tmpStr")
+	@Column(name = "cum_nombres_completos")
+//	@NotEmpty(message = "_error.validation_blank.message")
+	@JsonProperty("cumNombresCompletos")
 	@JsonInclude(Include.NON_NULL)
-	private String tmpStr;
+	private String cumNombresCompletos;
 
-	@ApiModelProperty(value = "Ejemplo parametros Long, Integer, Double")
-	@Column(name = "tmp_int")
-	@NotNull(message = "_error.validation_blank.message")
-	@JsonProperty("tmpInt")
+	@ApiModelProperty(value = "Fecha de registro del campo")
+	@Column(name = "cum_fecha_nac", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@JsonProperty("cumFechaNac")
 	@JsonInclude(Include.NON_NULL)
-	private Integer tmpInt;
+	private Date cumFechaNac;
+
+	@ApiModelProperty(value = "Campo para guardar la imagen")
+	@Column(name = "cum_imagen")
+//	@NotNull(message = "_error.validation_blank.message")
+	@JsonProperty("cumImagen")
+	@JsonInclude(Include.NON_NULL)
+	private byte[] cumImagen;
 
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
-
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "are_id")
+	private Area area;
 	/*****************************************************
 	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES
 	 *****************************************************/
 	@ApiModelProperty(value = "11=activo  12=inactivo", required = true, allowableValues = "11=>activo, 12=>inactivo", example = "11")
-	@Column(name = "tmp_estado", columnDefinition = "Integer default 11")
-	@JsonProperty("tmpEstado")
+	@Column(name = "cum_estado", columnDefinition = "Integer default 11")
+	@JsonProperty("cumEstado")
 	@JsonInclude(Include.NON_NULL)
-	private Integer tmpEstado;
+	private Integer cumEstado;
 
 	@ApiModelProperty(value = "Fecha de registro del campo", example = "")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "tmp_reg_fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	@JsonProperty("tmpRegFecha")
+	@Column(name = "cum_reg_fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@JsonProperty("cumRegFecha")
 	@JsonInclude(Include.NON_NULL)
-	private Date tmpRegFecha;
+	private Date cumRegFecha;
 
 	@ApiModelProperty(value = "Id de usuario que creó el regristro", example = "")
-	@Column(name = "tmp_reg_usu", nullable = false)
-	@JsonProperty("tmpRegUsu")
+	@Column(name = "cum_reg_usu", nullable = false)
+	@JsonProperty("cumRegUsu")
 	@JsonInclude(Include.NON_NULL)
 	@NotNull(message = "_error.validation_blank.message")
-	private Long tmpRegUsu;
+	private Integer cumRegUsu;
 
 	@ApiModelProperty(value = "Fecha en la que hizo la actualización del registro", example = "")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "tmp_act_fecha")
-	@JsonProperty("tmpActFecha")
+	@Column(name = "cum_act_fecha")
+	@JsonProperty("cumActFecha")
 	@JsonInclude(Include.NON_NULL)
-	private Date tmpActFecha;
+	private Date cumActFecha;
 
 	@ApiModelProperty(value = "Id de usuario que actualizacio del campo", example = "")
-	@Column(name = "tmp_act_usu")
-	@JsonProperty("tmpActUsu")
-	private Long tmpActUsu;
+	@Column(name = "cum_act_usu")
+	@JsonProperty("cumActUsu")
+	private Integer cumActUsu;
 
 	@ApiModelProperty(value = "Este campo almacena los valores f =false para eliminado logico  y t= true para indicar que está activo", required = true, allowableValues = "false=>no eliminado lógico, true=> eliminado lógico", example = "")
-	@Column(name = "tmp_eliminado", columnDefinition = "boolean default false")
-	@JsonProperty("tmpEliminado")
+	@Column(name = "cum_eliminado", columnDefinition = "boolean default false")
+	@JsonProperty("cumEliminado")
 	@JsonInclude(Include.NON_NULL)
-	private Boolean tmpEliminado;
+	private Boolean cumEliminado;
 
 	@PrePersist
 	void prePersist() {
-		this.tmpEstado = 11;
-		this.tmpEliminado = false;
-		this.tmpRegFecha = new Date();
+		this.cumEstado = 11;
+		this.cumEliminado = false;
+		this.cumRegFecha = new Date();
 	}
 
 	@PreUpdate
 	void preUpdate() {
-		this.tmpActFecha = new Date();
+		this.cumActFecha = new Date();
 	}
 }

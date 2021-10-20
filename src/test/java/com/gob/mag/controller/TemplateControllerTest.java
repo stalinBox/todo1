@@ -13,18 +13,18 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import ec.gob.mag.controller.TemplateController;
-import ec.gob.mag.services.TemplateService;
+import ec.gob.mag.controller.CumpleaniosController;
+import ec.gob.mag.services.CumpleaniosService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = TemplateController.class)
+@WebMvcTest(value = CumpleaniosController.class)
 public class TemplateControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
-	private TemplateService templateService;
+	private CumpleaniosService templateService;
 
 	@Test
 	public void retrieveDetailsForCourse() throws Exception {

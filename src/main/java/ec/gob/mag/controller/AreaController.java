@@ -1,5 +1,6 @@
 package ec.gob.mag.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,14 +14,20 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import ec.gob.mag.domain.Template;
-import ec.gob.mag.services.TemplateService;
+import ec.gob.mag.domain.Area;
+import ec.gob.mag.domain.constraint.AreaCreate;
+import ec.gob.mag.domain.constraint.AreaUpdate;
+import ec.gob.mag.domain.constraint.RegisterAudit;
+import ec.gob.mag.enums.Constante;
+import ec.gob.mag.services.AreaService;
+import ec.gob.mag.util.ConvertEntityUtil;
 import ec.gob.mag.util.ResponseController;
 import ec.gob.mag.util.Util;
 import io.swagger.annotations.Api;
@@ -31,25 +38,29 @@ import org.slf4j.LoggerFactory;
 import io.swagger.annotations.ApiResponse;
 
 @RestController
-@RequestMapping("/template")
-@Api(value = "Rest Api example", tags = "TEMPLATE")
+@RequestMapping("/area")
+@Api(value = "Rest Api example", tags = "AREA")
 @ApiResponses(value = { @ApiResponse(code = 200, message = "Objeto recuperado"),
 		@ApiResponse(code = 200, message = "SUCESS"), @ApiResponse(code = 404, message = "RESOURCE NOT FOUND"),
 		@ApiResponse(code = 400, message = "BAD REQUEST"), @ApiResponse(code = 201, message = "CREATED"),
 		@ApiResponse(code = 401, message = "UNAUTHORIZED"),
 		@ApiResponse(code = 415, message = "UNSUPPORTED TYPE - Representation not supported for the resource"),
 		@ApiResponse(code = 500, message = "SERVER ERROR") })
-public class TemplateController implements ErrorController {
+public class AreaController implements ErrorController {
 	private static final String PATH = "/error";
-	public static final Logger LOGGER = LoggerFactory.getLogger(TemplateController.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(AreaController.class);
 
 	@Autowired
-	@Qualifier("templateService")
-	private TemplateService templateService;
+	@Qualifier("areaService")
+	private AreaService areaService;
 
 	@Autowired
 	@Qualifier("responseController")
 	private ResponseController responseController;
+
+	@Autowired
+	@Qualifier("convertEntityUtil")
+	private ConvertEntityUtil convertEntityUtil;
 
 	@Autowired
 	@Qualifier("util")
@@ -63,11 +74,10 @@ public class TemplateController implements ErrorController {
 	 * @RequestHeader(name = "Authorization") String token
 	 */
 	@GetMapping(value = "/findAll")
-	@ApiOperation(value = "Obtiene todos los registros activos no eliminados logicamente", response = Template.class)
+	@ApiOperation(value = "Obtiene todos los registros activos no eliminados logicamente", response = Area.class)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> findAll(@RequestHeader(name = "Authorization") String token) {
-		List<Template> officer = templateService.findAll();
-
+		List<Area> officer = areaService.findAll();
 		LOGGER.info("template/findAll: " + officer.toString() + " usuario: " + util.filterUsuId(token));
 		return ResponseEntity.ok(officer);
 	}
@@ -79,11 +89,11 @@ public class TemplateController implements ErrorController {
 	 * @return parametrosCarga: Retorna el registro encontrado
 	 */
 	@GetMapping(value = "/findById/{id}")
-	@ApiOperation(value = "Get Template by id", response = Template.class)
+	@ApiOperation(value = "Obtiene el registro por id", response = Area.class)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Optional<?>> findById(@Validated @PathVariable Long id,
 			@RequestHeader(name = "Authorization") String token) {
-		Optional<Template> officer = templateService.findById(id);
+		Optional<Area> officer = areaService.findById(id, false, Constante.REGISTRO_ACTIVO.getCodigo());
 		LOGGER.info("findById: " + officer.toString() + " usuario: " + util.filterUsuId(token));
 		return ResponseEntity.ok(officer);
 	}
@@ -93,15 +103,22 @@ public class TemplateController implements ErrorController {
 	 * 
 	 * @param entidad: entidad a insertar
 	 * @return ResponseController: Retorna el id creado
+	 * @throws IOException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
 	 */
 	@PostMapping(value = "/create/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> postEntity(@Validated @RequestBody Template template,
-			@RequestHeader(name = "Authorization") String token) {
-		Template off = templateService.save(template);
-		LOGGER.info("Creado: " + template + " usuario: " + template.getTmpRegUsu());
-		return ResponseEntity.ok(new ResponseController(off.getId(), "Creado"));
+	public ResponseEntity<ResponseController> postEntity(@Validated @RequestBody AreaCreate create,
+			@RequestHeader(name = "Authorization") String token) throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException, IOException {
+		Area objectoValidado = convertEntityUtil.ConvertSingleEntityGET(Area.class, (Object) create);
+		Area off = areaService.save(objectoValidado);
+		LOGGER.info("Creado: " + objectoValidado + " usuario: " + objectoValidado.getAreRegUsu());
+		return ResponseEntity.ok(new ResponseController(off.getAreId(), "Creado"));
 	}
 
 	/**
@@ -111,37 +128,44 @@ public class TemplateController implements ErrorController {
 	 * 
 	 * @param entidad: entidad a actualizar
 	 * @return ResponseController: Retorna el id actualizado
+	 * @throws IOException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
 	 */
-	@PostMapping(value = "/update/{usuId}")
+	@PutMapping(value = "/update/")
 	@ApiOperation(value = "Actualizar los registros", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> update(@Validated @RequestBody Template update, @PathVariable Long usuId,
-			@RequestHeader(name = "Authorization") String token) {
-		update.setTmpActUsu(usuId);
-		Template off = templateService.update(update);
-		LOGGER.info("Actualizado: " + off + " usuario: " + usuId);
-		return ResponseEntity.ok(new ResponseController(off.getId(), "Actualizado"));
+	public ResponseEntity<ResponseController> update(@Validated @RequestBody AreaUpdate update,
+			@RequestHeader(name = "Authorization") String token) throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException, IOException {
+		Area objectoValidado = convertEntityUtil.ConvertSingleEntityGET(Area.class, (Object) update);
+		Area off = areaService.update(objectoValidado);
+		LOGGER.info("Actualizado: " + off + " usuario: " + update.getAreActUsu());
+		return ResponseEntity.ok(new ResponseController(off.getAreId(), "Actualizado"));
 	}
 
 	/**
-	 * Realiza un eliminado logico del registro
+	 * Realiza un mantenimiento del estado del registro
 	 * 
-	 * @param id:    Identificador del registro
-	 * @param usuId: Identificador del usuario que va a eliminar
+	 * @param RegisterAudit: Identificador del registro contiene
+	 *                       id,actUsu,eliminado,estado,desc
 	 * @return ResponseController: Retorna el id eliminado
 	 */
-	@GetMapping(value = "/delete/{id}/{usuId}")
-	@ApiOperation(value = "Remove template by id")
+	@PutMapping(value = "/state-record/")
+	@ApiOperation(value = "Gestionar estado del registro de la tabla CIALCO, ciaEstado={11 ACTIVO,12 INACTIVO}, ciaEliminado={false, true}, state: {disable, delete, activate}")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<ResponseController> deleteOfficer(@PathVariable Long id, @PathVariable Long usuId,
-			@RequestHeader(name = "Authorization") String token) {
-		Template deleteTemplate = templateService.findById(id)
-				.orElseThrow(() -> new InvalidConfigurationPropertyValueException("Template", "Id", id.toString()));
-		deleteTemplate.setTmpEliminado(true);
-		deleteTemplate.setTmpActUsu(usuId);
-		Template officerDel = templateService.save(deleteTemplate);
-		LOGGER.info("Eliminado: " + id + " usuario: " + usuId);
-		return ResponseEntity.ok(new ResponseController(officerDel.getId(), "eliminado"));
+	public ResponseEntity<ResponseController> stateCialco(@RequestHeader(name = "Authorization") String token,
+			@Validated @RequestBody RegisterAudit audit) {
+		Area row = areaService.findByIdAll(audit.getId()).orElseThrow(
+				() -> new InvalidConfigurationPropertyValueException("Cialco", "Id", audit.getId().toString()));
+		row.setAreEliminado(audit.getEliminado());
+		row.setAreEstado(audit.getEstado());
+		row.setAreActUsu(audit.getActUsu());
+		Area areaDel = areaService.save(row);
+		LOGGER.info("cialco state-record : " + audit.getId() + " usuario: " + util.filterUsuId(token));
+		return ResponseEntity.ok(new ResponseController(areaDel.getAreId(), audit.getDesc()));
 	}
 
 	@Override
