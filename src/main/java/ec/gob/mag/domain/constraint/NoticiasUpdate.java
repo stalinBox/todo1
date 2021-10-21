@@ -70,6 +70,11 @@ public class NoticiasUpdate implements Serializable {
 	@NotNull(message = "_error.validation_blank.message")
 	private Integer notActUsu;
 
+	@ApiModelProperty(value = "Ejemplo parametro String", example = "Link URL")
+	@Column(name = "not_url")
+	@JsonProperty("notUrl")
+	@JsonInclude(Include.NON_NULL)
+	private String notUrl;
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
