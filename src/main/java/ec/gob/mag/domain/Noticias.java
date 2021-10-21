@@ -73,6 +73,13 @@ public class Noticias implements Serializable {
 	@JsonProperty("notEstadoPubli")
 	@JsonInclude(Include.NON_NULL)
 	private Boolean notEstadoPubli;
+
+	@ApiModelProperty(value = "Ejemplo parametro String", example = "Link URL")
+	@Column(name = "not_url")
+	@JsonProperty("notUrl")
+	@JsonInclude(Include.NON_NULL)
+	private String notUrl;
+
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
