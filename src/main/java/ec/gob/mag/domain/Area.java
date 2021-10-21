@@ -10,17 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -73,11 +69,19 @@ public class Area implements Serializable {
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
-	@OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "cum_id")
+	@JsonProperty("cumpleanios")
+	@JsonInclude(Include.NON_NULL)
 	private List<Cumpleanios> cumpleanios;
 
-	@OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "not_id")
+	@JsonProperty("noticias")
+	@JsonInclude(Include.NON_NULL)
 	private List<Noticias> noticias;
+
 	/*****************************************************
 	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES
 	 *****************************************************/
@@ -98,7 +102,6 @@ public class Area implements Serializable {
 	@Column(name = "are_reg_usu", nullable = false)
 	@JsonProperty("areRegUsu")
 	@JsonInclude(Include.NON_NULL)
-	@NotNull(message = "_error.validation_blank.message")
 	private Integer areRegUsu;
 
 	@ApiModelProperty(value = "Fecha en la que hizo la actualización del registro", example = "")

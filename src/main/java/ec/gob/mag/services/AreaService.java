@@ -16,7 +16,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import ec.gob.mag.domain.Area;
-import ec.gob.mag.domain.constraint.AreaUpdate;
 import ec.gob.mag.enums.Constante;
 import ec.gob.mag.exception.MyNotFoundException;
 import ec.gob.mag.repository.AreaRepository;
@@ -32,15 +31,6 @@ public class AreaService {
 	private MessageSource messageSource;
 
 	public void clearObjectLazyVariables(Area org) {
-		org.getCumpleanios().stream().map(u -> {
-			u.setArea(null);
-			return u;
-		}).collect(Collectors.toList());
-
-		org.getNoticias().stream().map(u -> {
-			u.setArea(null);
-			return u;
-		}).collect(Collectors.toList());
 
 	}
 

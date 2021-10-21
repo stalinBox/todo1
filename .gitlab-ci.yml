@@ -4,7 +4,7 @@ stages:
 
 variables:
 #se debe colocar el nombre del war resultante miartefacto.war
-  NOMBRE_WAR: "AQUI_ESCRIBA_EL_NOMBRE.war"
+  NOMBRE_WAR: "micro_noticias_mag.war"
   DESARROLLO_IP: "10.10.1.52:9990" 
   PRUEBAS_IP: "10.10.1.121:9990" 
   PRODUCCION_IP: "192.168.1.20:9990" 

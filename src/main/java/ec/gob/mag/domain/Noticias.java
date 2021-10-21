@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -50,24 +51,19 @@ public class Noticias implements Serializable {
 	private Long notId;
 
 	@ApiModelProperty(value = "Ejemplo parametro String", example = "Titulo noticia")
-//	@Size(min = 0, max = 64, message = "_error.validation_range.message-[0, 64]")
 	@Column(name = "not_titulo")
-//	@NotEmpty(message = "_error.validation_blank.message")
 	@JsonProperty("notTitulo")
 	@JsonInclude(Include.NON_NULL)
 	private String notTitulo;
 
 	@ApiModelProperty(value = "Ejemplo parametro String", example = "Titulo noticia")
-//	@Size(min = 0, max = 64, message = "_error.validation_range.message-[0, 64]")
 	@Column(name = "not_descripcion")
-//	@NotEmpty(message = "_error.validation_blank.message")
 	@JsonProperty("notDescripcion")
 	@JsonInclude(Include.NON_NULL)
 	private String notDescripcion;
 
 	@ApiModelProperty(value = "Campo para guardar la imagen")
 	@Column(name = "not_imagen")
-//	@NotNull(message = "_error.validation_blank.message")
 	@JsonProperty("notImagen")
 	@JsonInclude(Include.NON_NULL)
 	private byte[] notImagen;
@@ -82,7 +78,11 @@ public class Noticias implements Serializable {
 	 ******************************************************/
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "are_id")
+	@JsonProperty("area")
+//	@JsonInclude(Include.NON_NULL)
+	@JsonBackReference
 	private Area area;
+
 	/*****************************************************
 	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES
 	 *****************************************************/
