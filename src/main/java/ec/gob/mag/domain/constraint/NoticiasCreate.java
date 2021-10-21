@@ -1,23 +1,12 @@
 package ec.gob.mag.domain.constraint;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -91,38 +80,5 @@ public class NoticiasCreate implements Serializable {
 	@JoinColumn(name = "are_id")
 	@NotNull(message = "_error.validation_blank.message")
 	private Area area;
-	/*****************************************************
-	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES
-	 *****************************************************/
-//	@ApiModelProperty(value = "11=activo  12=inactivo", required = true, allowableValues = "11=>activo, 12=>inactivo", example = "11")
-//	@Column(name = "not_estado", columnDefinition = "Integer default 11")
-//	@JsonProperty("notEstado")
-//	@JsonInclude(Include.NON_NULL)
-//	private Integer notEstado;
-//
-//	@ApiModelProperty(value = "Fecha de registro del campo", example = "")
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@Column(name = "not_reg_fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-//	@JsonProperty("notRegFecha")
-//	@JsonInclude(Include.NON_NULL)
-//	private Date notRegFecha;
-//
-//	@ApiModelProperty(value = "Fecha en la que hizo la actualización del registro", example = "")
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@Column(name = "not_act_fecha")
-//	@JsonProperty("notActFecha")
-//	@JsonInclude(Include.NON_NULL)
-//	private Date notActFecha;
-//
-//	@ApiModelProperty(value = "Id de usuario que actualizacio del campo", example = "")
-//	@Column(name = "not_act_usu")
-//	@JsonProperty("notActUsu")
-//	private Integer notActUsu;
-//
-//	@ApiModelProperty(value = "Este campo almacena los valores f =false para eliminado logico  y t= true para indicar que está activo", required = true, allowableValues = "false=>no eliminado lógico, true=> eliminado lógico", example = "")
-//	@Column(name = "not_eliminado", columnDefinition = "boolean default false")
-//	@JsonProperty("cEliminado")
-//	@JsonInclude(Include.NON_NULL)
-//	private Boolean notEliminado;
 
 }

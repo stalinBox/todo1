@@ -30,12 +30,14 @@ public class NoticiasService {
 	private MessageSource messageSource;
 
 	public void clearObjectLazyVariables(Noticias org) {
+
+//		org.getArea().setCumpleanios(null);
+//		org.getArea().setNoticias(null);
 //		org.getArea().getCumpleanios().stream().map(u -> {
-//			u.getArea().setCumpleanios(null);
 //			u.getArea().setNoticias(null);
+//			u.getArea().setCumpleanios(null);
 //			return u;
 //		}).collect(Collectors.toList());
-		org.setArea(null);
 
 	}
 

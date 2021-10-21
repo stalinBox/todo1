@@ -16,12 +16,10 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -57,7 +55,6 @@ public class Cumpleanios implements Serializable {
 	@ApiModelProperty(value = "Ejemplo parametro String", example = "Nombres Completos")
 	@Size(min = 0, max = 64, message = "_error.validation_range.message-[0, 64]")
 	@Column(name = "cum_nombres_completos")
-//	@NotEmpty(message = "_error.validation_blank.message")
 	@JsonProperty("cumNombresCompletos")
 	@JsonInclude(Include.NON_NULL)
 	private String cumNombresCompletos;
@@ -70,7 +67,6 @@ public class Cumpleanios implements Serializable {
 
 	@ApiModelProperty(value = "Campo para guardar la imagen")
 	@Column(name = "cum_imagen")
-//	@NotNull(message = "_error.validation_blank.message")
 	@JsonProperty("cumImagen")
 	@JsonInclude(Include.NON_NULL)
 	private byte[] cumImagen;
@@ -80,7 +76,11 @@ public class Cumpleanios implements Serializable {
 	 ******************************************************/
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "are_id")
+	@JsonProperty("area")
+//	@JsonInclude(Include.NON_NULL)
+	@JsonBackReference
 	private Area area;
+
 	/*****************************************************
 	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES
 	 *****************************************************/
