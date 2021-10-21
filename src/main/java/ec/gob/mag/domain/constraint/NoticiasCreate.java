@@ -2,6 +2,7 @@ package ec.gob.mag.domain.constraint;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -73,6 +74,11 @@ public class NoticiasCreate implements Serializable {
 	@NotNull(message = "_error.validation_blank.message")
 	private Integer notRegUsu;
 
+	@ApiModelProperty(value = "Ejemplo parametro String", example = "Link URL")
+	@Column(name = "not_url")
+	@JsonProperty("notUrl")
+	@JsonInclude(Include.NON_NULL)
+	private String notUrl;
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
