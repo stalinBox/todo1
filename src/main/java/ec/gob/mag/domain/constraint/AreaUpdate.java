@@ -1,24 +1,12 @@
 package ec.gob.mag.domain.constraint;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -72,49 +60,5 @@ public class AreaUpdate implements Serializable {
 	@JsonProperty("areActUsu")
 	@NotNull(message = "_error.validation_blank.message")
 	private Integer areActUsu;
-
-	/******************************************************
-	 * SECCION - RELACIONES JPA
-	 ******************************************************/
-//	@OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
-//	private List<Cumpleanios> cumpleanios;
-//
-//	@OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
-//	private List<Noticias> noticias;
-	/*****************************************************
-	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES
-	 *****************************************************/
-//	@ApiModelProperty(value = "11=activo  12=inactivo", required = true, allowableValues = "11=>activo, 12=>inactivo", example = "11")
-//	@Column(name = "are_estado", columnDefinition = "Integer default 11")
-//	@JsonProperty("areEstado")
-//	@JsonInclude(Include.NON_NULL)
-//	private Integer areEstado;
-//
-//	@ApiModelProperty(value = "Fecha de registro del campo", example = "")
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@Column(name = "are_reg_fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-//	@JsonProperty("areRegFecha")
-//	@JsonInclude(Include.NON_NULL)
-//	private Date areRegFecha;
-//
-//	@ApiModelProperty(value = "Id de usuario que creó el regristro", example = "")
-//	@Column(name = "are_reg_usu", nullable = false)
-//	@JsonProperty("areRegUsu")
-//	@JsonInclude(Include.NON_NULL)
-//	@NotNull(message = "_error.validation_blank.message")
-//	private Integer areRegUsu;
-//
-//	@ApiModelProperty(value = "Fecha en la que hizo la actualización del registro", example = "")
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@Column(name = "are_act_fecha")
-//	@JsonProperty("areActFecha")
-//	@JsonInclude(Include.NON_NULL)
-//	private Date areActFecha;
-
-//	@ApiModelProperty(value = "Este campo almacena los valores f =false para eliminado logico  y t= true para indicar que está activo", required = true, allowableValues = "false=>no eliminado lógico, true=> eliminado lógico", example = "")
-//	@Column(name = "are_eliminado", columnDefinition = "boolean default false")
-//	@JsonProperty("areEliminado")
-//	@JsonInclude(Include.NON_NULL)
-//	private Boolean areEliminado;
 
 }

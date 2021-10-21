@@ -3,22 +3,11 @@ package ec.gob.mag.domain.constraint;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -85,39 +74,5 @@ public class CumpleaniosCreate implements Serializable {
 	@JoinColumn(name = "are_id")
 	@NotNull(message = "_error.validation_blank.message")
 	private Area area;
-	/*****************************************************
-	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES
-	 *****************************************************/
-//	@ApiModelProperty(value = "11=activo  12=inactivo", required = true, allowableValues = "11=>activo, 12=>inactivo", example = "11")
-//	@Column(name = "cum_estado", columnDefinition = "Integer default 11")
-//	@JsonProperty("cumEstado")
-//	@JsonInclude(Include.NON_NULL)
-//	private Integer cumEstado;
-//
-//	@ApiModelProperty(value = "Fecha de registro del campo", example = "")
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@Column(name = "cum_reg_fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-//	@JsonProperty("cumRegFecha")
-//	@JsonInclude(Include.NON_NULL)
-//	private Date cumRegFecha;
-//
-//	@ApiModelProperty(value = "Id de usuario que creó el regristro", example = "")
-//	@Column(name = "cum_reg_usu", nullable = false)
-//	@JsonProperty("cumRegUsu")
-//	@JsonInclude(Include.NON_NULL)
-//	@NotNull(message = "_error.validation_blank.message")
-//	private Integer cumRegUsu;
-//
-//	@ApiModelProperty(value = "Fecha en la que hizo la actualización del registro", example = "")
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@Column(name = "cum_act_fecha")
-//	@JsonProperty("cumActFecha")
-//	@JsonInclude(Include.NON_NULL)
-//	private Date cumActFecha;
-
-//	@ApiModelProperty(value = "Id de usuario que actualizacio del campo", example = "")
-//	@Column(name = "cum_act_usu")
-//	@JsonProperty("cumActUsu")
-//	private Integer cumActUsu;
 
 }
