@@ -66,7 +66,7 @@ public class Noticias implements Serializable {
 	@Column(name = "not_imagen")
 	@JsonProperty("notImagen")
 	@JsonInclude(Include.NON_NULL)
-	private byte[] notImagen;
+	private String notImagen;
 
 	@ApiModelProperty(value = "Este campo almacena los valores f =false para eliminado logico  y t= true para indicar que está activo", required = true, allowableValues = "false=>no eliminado lógico, true=> eliminado lógico", example = "")
 	@Column(name = "not_estado_publi", columnDefinition = "boolean default false")

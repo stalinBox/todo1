@@ -63,7 +63,7 @@ public class CumpleaniosUpdate implements Serializable {
 	@Column(name = "cum_imagen")
 	@JsonProperty("cumImagen")
 	@JsonInclude(Include.NON_NULL)
-	private byte[] cumImagen;
+	private String cumImagen;
 
 	@ApiModelProperty(value = "Id de usuario que actualizacio del campo", example = "")
 	@Column(name = "cum_act_usu")
