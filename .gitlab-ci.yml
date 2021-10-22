@@ -13,8 +13,7 @@ despliegue_pruebas:
   stage: despliegue
   allow_failure: false
   script:
-    - mvn clean install
-    - mvn install -DskipTests
+    - mvn clean install -DskipTests
     - /opt/wildfly/bin/jboss-cli.sh --connect --controller=$PRUEBAS_IP  --user=$WILDFLY_PRUEBAS_USUARIO --password=$WILDFLY_PRUEBAS_PASSWORD --command="deploy target/$NOMBRE_WAR --force"
   tags:
     - shell
@@ -26,8 +25,7 @@ despliegue_produccion:
   stage: despliegue
   allow_failure: false
   script:
-    - mvn clean install
-    - mvn install -DskipTests
+    - mvn clean install -DskipTests
     - /opt/wildfly/bin/jboss-cli.sh --connect --controller=$PRODUCCION_IP  --user=$WILDFLY_PRODUCCION_USUARIO --password=$WILDFLY_PRODUCCION_PASSWORD --command="deploy target/$NOMBRE_WAR --force"
   tags:
     - shell
