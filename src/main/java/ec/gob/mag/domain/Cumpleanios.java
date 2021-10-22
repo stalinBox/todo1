@@ -69,7 +69,7 @@ public class Cumpleanios implements Serializable {
 	@Column(name = "cum_imagen")
 	@JsonProperty("cumImagen")
 	@JsonInclude(Include.NON_NULL)
-	private byte[] cumImagen;
+	private String cumImagen;
 
 	/******************************************************
 	 * SECCION - RELACIONES JPA

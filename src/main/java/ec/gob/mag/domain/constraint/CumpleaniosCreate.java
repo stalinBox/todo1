@@ -59,7 +59,7 @@ public class CumpleaniosCreate implements Serializable {
 	@ApiModelProperty(value = "Campo para guardar la imagen")
 	@JsonProperty("cumImagen")
 	@JsonInclude(Include.NON_NULL)
-	private byte[] cumImagen;
+	private String cumImagen;
 
 	@ApiModelProperty(value = "Id de usuario que creó el regristro")
 	@JsonProperty("cumRegUsu")
