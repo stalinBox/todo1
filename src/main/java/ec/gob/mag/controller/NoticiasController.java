@@ -57,9 +57,6 @@ public class NoticiasController implements ErrorController {
 	@Qualifier("responseController")
 	private ResponseController responseController;
 
-//	@Autowired
-//	private MessageSource messageSource;
-
 	@Autowired
 	@Qualifier("convertEntityUtil")
 	private ConvertEntityUtil convertEntityUtil;
@@ -117,9 +114,8 @@ public class NoticiasController implements ErrorController {
 	public ResponseEntity<ResponseController> postEntity(@Validated @RequestBody NoticiasCreate create,
 			@RequestHeader(name = "Authorization") String token) throws NoSuchFieldException, SecurityException,
 			IllegalArgumentException, IllegalAccessException, IOException {
-
 		Noticias objectoValidado = convertEntityUtil.ConvertSingleEntityGET(Noticias.class, (Object) create);
-
+		objectoValidado.setArea(create.getArea());
 		Noticias off = noticiasService.save(objectoValidado);
 		LOGGER.info("Creado: " + objectoValidado + " usuario: " + create.getNotRegUsu());
 		return ResponseEntity.ok(new ResponseController(off.getNotId(), "Creado"));

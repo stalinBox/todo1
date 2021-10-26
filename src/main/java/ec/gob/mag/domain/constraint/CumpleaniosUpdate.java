@@ -76,6 +76,7 @@ public class CumpleaniosUpdate implements Serializable {
 	 ******************************************************/
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "are_id")
+	@JsonProperty("area")
 	private Area area;
 
 }

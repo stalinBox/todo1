@@ -31,14 +31,8 @@ public class NoticiasService {
 
 	public void clearObjectLazyVariables(Noticias org) {
 
-//		org.getArea().setCumpleanios(null);
-//		org.getArea().setNoticias(null);
-//		org.getArea().getCumpleanios().stream().map(u -> {
-//			u.getArea().setNoticias(null);
-//			u.getArea().setCumpleanios(null);
-//			return u;
-//		}).collect(Collectors.toList());
-
+		org.getArea().setCumpleanios(null);
+		org.getArea().setNoticias(null);
 	}
 
 	public List<Noticias> clearListLazyVariables(List<Noticias> orgs) {
@@ -63,7 +57,6 @@ public class NoticiasService {
 			throw new MyNotFoundException(String.format(
 					messageSource.getMessage("error.entity_cero_exist.message", null, LocaleContextHolder.getLocale()),
 					id));
-		clearObjectLazyVariables(fun.get());
 		return fun;
 	}
 

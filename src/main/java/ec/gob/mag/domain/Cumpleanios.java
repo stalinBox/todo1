@@ -19,7 +19,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -29,9 +28,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(of = "cumId")
@@ -77,8 +80,6 @@ public class Cumpleanios implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "are_id")
 	@JsonProperty("area")
-//	@JsonInclude(Include.NON_NULL)
-	@JsonBackReference
 	private Area area;
 
 	/*****************************************************

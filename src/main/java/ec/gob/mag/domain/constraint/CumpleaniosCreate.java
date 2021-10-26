@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -71,8 +70,7 @@ public class CumpleaniosCreate implements Serializable {
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "are_id")
+	@JsonProperty("area")
 	@NotNull(message = "_error.validation_blank.message")
 	private Area area;
-
 }

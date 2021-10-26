@@ -115,6 +115,7 @@ public class CumpleaniosController implements ErrorController {
 			@RequestHeader(name = "Authorization") String token) throws NoSuchFieldException, SecurityException,
 			IllegalArgumentException, IllegalAccessException, IOException {
 		Cumpleanios objetoValidado = convertEntityUtil.ConvertSingleEntityGET(Cumpleanios.class, (Object) create);
+		objetoValidado.setArea(create.getArea());
 		Cumpleanios off = cumpleaniosService.save(objetoValidado);
 		LOGGER.info("Creado: " + off + " usuario: " + create.getCumRegUsu());
 		return ResponseEntity.ok(new ResponseController(off.getCumId(), "Creado"));

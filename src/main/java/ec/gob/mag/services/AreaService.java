@@ -31,7 +31,15 @@ public class AreaService {
 	private MessageSource messageSource;
 
 	public void clearObjectLazyVariables(Area org) {
+		org.getCumpleanios().stream().map(mpr -> {
+			mpr.setArea(null);
+			return mpr;
+		}).collect(Collectors.toSet());
 
+		org.getNoticias().stream().map(mpr -> {
+			mpr.setArea(null);
+			return mpr;
+		}).collect(Collectors.toSet());
 	}
 
 	public List<Area> clearListLazyVariables(List<Area> orgs) {
