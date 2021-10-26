@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -27,9 +26,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(of = "notId")
@@ -83,11 +86,9 @@ public class Noticias implements Serializable {
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "are_id")
 	@JsonProperty("area")
-//	@JsonInclude(Include.NON_NULL)
-	@JsonBackReference
 	private Area area;
 
 	/*****************************************************

@@ -31,15 +31,8 @@ public class CumpleaniosService {
 	private MessageSource messageSource;
 
 	public void clearObjectLazyVariables(Cumpleanios org) {
-
-//		org.getArea().setNoticias(null);
-
-//		org.getArea().getCumpleanios().stream().map(u -> {
-//			u.getArea().setNoticias(null);
-//			u.getArea().setCumpleanios(null);
-//			return u;
-//		}).collect(Collectors.toList());
-
+		org.getArea().setNoticias(null);
+		org.getArea().setCumpleanios(null);
 	}
 
 	public List<Cumpleanios> clearListLazyVariables(List<Cumpleanios> orgs) {
@@ -64,7 +57,6 @@ public class CumpleaniosService {
 			throw new MyNotFoundException(String.format(
 					messageSource.getMessage("error.entity_cero_exist.message", null, LocaleContextHolder.getLocale()),
 					id));
-		clearObjectLazyVariables(fun.get());
 		return fun;
 	}
 

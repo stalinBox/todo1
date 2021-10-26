@@ -57,9 +57,6 @@ public class NoticiasController implements ErrorController {
 	@Qualifier("responseController")
 	private ResponseController responseController;
 
-//	@Autowired
-//	private MessageSource messageSource;
-
 	@Autowired
 	@Qualifier("convertEntityUtil")
 	private ConvertEntityUtil convertEntityUtil;

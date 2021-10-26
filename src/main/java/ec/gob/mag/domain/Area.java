@@ -2,15 +2,15 @@ package ec.gob.mag.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -27,9 +28,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(of = "areId")
@@ -51,17 +56,13 @@ public class Area implements Serializable {
 	private Long areId;
 
 	@ApiModelProperty(value = "Ejemplo parametro String", example = "Nombres Completos")
-//	@Size(min = 0, max = 64, message = "_error.validation_range.message-[0, 64]")
 	@Column(name = "are_nombre")
-//	@NotEmpty(message = "_error.validation_blank.message")
 	@JsonProperty("areNombre")
 	@JsonInclude(Include.NON_NULL)
 	private String areNombre;
 
 	@ApiModelProperty(value = "Ejemplo parametro String", example = "Nombres Completos")
-//	@Size(min = 0, max = 64, message = "_error.validation_range.message-[0, 64]")
 	@Column(name = "are_descripcion")
-//	@NotEmpty(message = "_error.validation_blank.message")
 	@JsonProperty("areDescripcion")
 	@JsonInclude(Include.NON_NULL)
 	private String areDescripcion;
@@ -69,18 +70,19 @@ public class Area implements Serializable {
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
-
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "cum_id")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "area", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, orphanRemoval = true)
 	@JsonProperty("cumpleanios")
 	@JsonInclude(Include.NON_NULL)
-	private List<Cumpleanios> cumpleanios;
+	@JsonManagedReference("area-cumpleanios")
+	private Set<Cumpleanios> cumpleanios;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "not_id")
-	@JsonProperty("noticias")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "area", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, orphanRemoval = true)
+	@JsonProperty("ubicacionFuncionario")
 	@JsonInclude(Include.NON_NULL)
-	private List<Noticias> noticias;
+	@JsonManagedReference("area-noticias")
+	private Set<Noticias> noticias;
 
 	/*****************************************************
 	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES
