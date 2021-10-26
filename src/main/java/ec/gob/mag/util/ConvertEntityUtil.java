@@ -15,8 +15,9 @@ public class ConvertEntityUtil {
 			SecurityException, IllegalArgumentException, IllegalAccessException {
 		String jsonString = null;
 		ObjectMapper mprObjecto = new ObjectMapper();
-		mprObjecto.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-		mprObjecto.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+		mprObjecto.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mprObjecto.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, false);
+		mprObjecto.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
 		jsonString = mprObjecto.writeValueAsString(obj);
 		return mprObjecto.readValue(jsonString, clazz);
 	}

@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -83,7 +82,7 @@ public class NoticiasCreate implements Serializable {
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "are_id")
+	@JsonProperty("area")
 	@NotNull(message = "_error.validation_blank.message")
 	private Area area;
 

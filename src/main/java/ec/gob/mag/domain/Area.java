@@ -2,6 +2,7 @@ package ec.gob.mag.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,7 +20,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -70,19 +70,17 @@ public class Area implements Serializable {
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "area", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "area", cascade = { CascadeType.ALL })
 	@JsonProperty("cumpleanios")
 	@JsonInclude(Include.NON_NULL)
-	@JsonManagedReference("area-cumpleanios")
+//	@JsonManagedReference("area-cumpleanios")
 	private Set<Cumpleanios> cumpleanios;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "area", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, orphanRemoval = true)
-	@JsonProperty("ubicacionFuncionario")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "area", cascade = { CascadeType.ALL })
+	@JsonProperty("noticias")
 	@JsonInclude(Include.NON_NULL)
-	@JsonManagedReference("area-noticias")
-	private Set<Noticias> noticias;
+//	@JsonManagedReference("area-noticias")
+	private List<Noticias> noticias;
 
 	/*****************************************************
 	 * SECCION - CAMPOS POR DEFECTO EN TODAS LAS ENTIDADES

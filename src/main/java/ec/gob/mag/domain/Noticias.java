@@ -86,9 +86,10 @@ public class Noticias implements Serializable {
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "are_id")
 	@JsonProperty("area")
+//	@JsonBackReference
 	private Area area;
 
 	/*****************************************************

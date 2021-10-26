@@ -77,7 +77,7 @@ public class Cumpleanios implements Serializable {
 	/******************************************************
 	 * SECCION - RELACIONES JPA
 	 ******************************************************/
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "are_id")
 	@JsonProperty("area")
 	private Area area;
