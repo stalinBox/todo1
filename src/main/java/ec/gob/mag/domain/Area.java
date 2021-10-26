@@ -73,13 +73,11 @@ public class Area implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "area", cascade = { CascadeType.ALL })
 	@JsonProperty("cumpleanios")
 	@JsonInclude(Include.NON_NULL)
-//	@JsonManagedReference("area-cumpleanios")
 	private Set<Cumpleanios> cumpleanios;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "area", cascade = { CascadeType.ALL })
 	@JsonProperty("noticias")
 	@JsonInclude(Include.NON_NULL)
-//	@JsonManagedReference("area-noticias")
 	private List<Noticias> noticias;
 
 	/*****************************************************
