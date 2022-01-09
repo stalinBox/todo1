@@ -3,6 +3,9 @@
 ## Codigo Fuente
 https://github.com/stalinBox/todo1.git
 
+## Link Video
+https://1drv.ms/u/s!AvP_KM4XsKyDuiDNe_zV81VotmKW?e=7gec3W
+
 ## Requerimientos
 * Servidor WildFly
 * IDE STS
