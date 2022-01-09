@@ -30,8 +30,8 @@ import lombok.ToString;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString(of = "cli_id")
 @EqualsAndHashCode(of = "cli_id")
 @Builder

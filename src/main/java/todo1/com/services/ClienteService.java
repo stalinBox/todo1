@@ -90,7 +90,9 @@ public class ClienteService {
 	 * @param id: Identificador del registro
 	 */
 	public void delete(Long id) {
+
 		clienteRepository.deleteById(id);
+
 	}
 
 	/**

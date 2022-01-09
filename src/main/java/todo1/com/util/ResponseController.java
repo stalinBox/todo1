@@ -1,6 +1,6 @@
 package todo1.com.util;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Service("responseController")
+@Component("responseController")
 public class ResponseController {
 	private Long id;
 	private String estado;

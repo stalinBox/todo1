@@ -25,8 +25,6 @@ import todo1.com.domain.Cliente;
 import todo1.com.services.ClienteService;
 import todo1.com.util.ResponseController;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.swagger.annotations.ApiResponse;
 
 @RestController
@@ -40,14 +38,12 @@ import io.swagger.annotations.ApiResponse;
 		@ApiResponse(code = 500, message = "SERVER ERROR") })
 public class ClienteController implements ErrorController {
 	private static final String PATH = "/error";
-	public static final Logger LOGGER = LoggerFactory.getLogger(ClienteController.class);
 
 	@Autowired
 	@Qualifier("clienteService")
 	private ClienteService clienteService;
 
-	@Autowired
-	@Qualifier("responseController")
+	@SuppressWarnings("unused")
 	private ResponseController responseController;
 
 	/**
@@ -89,7 +85,8 @@ public class ClienteController implements ErrorController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<ResponseController> postEntity(@RequestBody Cliente cliente) {
 		Cliente clienteSaved = clienteService.save(cliente);
-		return ResponseEntity.ok(new ResponseController(clienteSaved.getCli_id(), "Creado"));
+		return new ResponseEntity<ResponseController>(new ResponseController(clienteSaved.getCli_id(), "Creado"),
+				HttpStatus.CREATED);
 	}
 
 	/**
