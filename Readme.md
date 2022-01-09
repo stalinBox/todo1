@@ -1,5 +1,5 @@
-# Plantilla Base para la coodificación de microservicios.
-
+# Plantilla Base para la coodificación de servicios.
+## By Stalin Ramirez
 ## Codigo Fuente
 https://github.com/stalinBox/todo1.git
 
@@ -15,12 +15,10 @@ https://github.com/stalinBox/todo1.git
 
 2.- Crear un archivo llamado module.xml en el path: *home_wildfly\modules\system\layers\base\org\postgresql\main*
 
-
 3.- Pegar el codigo en el archivo module.xml
 > El valor del atributo path de la etiqueta <resource-root debe ser el nombre del jar que se descargo y pego en la carpeta main.
 
 ''''
-
 	<?xml version="1.0" encoding="UTF-8"?>
 	<module xmlns="urn:jboss:module:1.3" name="org.postgresql">
 	    <resources>
@@ -33,26 +31,3 @@ https://github.com/stalinBox/todo1.git
 	    </dependencies>
 	</module>
 ''''
-
-## Configuración del datasource
-
-
-1. Abrir el archivo ´home_wildfly/configuration/standalone/configuration/standalone.xml´ y dentro de la etiqueta ´<datasources>´ crear un nuevo datasource.
-
-'''
-
-	<datasource jndi-name="java:jboss/datasources/PostgreSQLDataSource" pool-name="PostgreSQLDataSourcePool" enabled="true" use-java-context="true" statistics-enabled="true">
-	                    <connection-url>jdbc:postgresql://localhost:5432/FuncionariosMAG</connection-url>
-	    <driver>postgresql</driver>
-	    <security>
-	        <user-name>postgres</user-name>
-	        <password>magap1.2</password>
-	    </security>
-	</datasource>
-'''
-
-2. En el caso de que no este incluido el driver en el archivo standalone.xml agregar las lineas dentro de la etiqueta ´<drivers>´
-'''
-<driver name="postgresql" module="org.postgresql">                    	<driver-class>org.postgresql.Driver</driver-class>
-</driver>
-'''
