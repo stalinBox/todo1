@@ -46,8 +46,7 @@ public class SubGrupoController implements ErrorController {
 	@Qualifier("subGrupoService")
 	private SubGrupoService subGrupoService;
 
-	@Autowired
-	@Qualifier("responseController")
+	@SuppressWarnings("unused")
 	private ResponseController responseController;
 
 	/**
@@ -86,10 +85,10 @@ public class SubGrupoController implements ErrorController {
 	 */
 	@PostMapping(value = "/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> postEntity(@RequestBody SubGrupo cliente) {
-		SubGrupo subGrupoSaved = subGrupoService.save(cliente);
-		return ResponseEntity.ok(new ResponseController(subGrupoSaved.getSgrup_id(), "Creado"));
+	public ResponseEntity<ResponseController> postEntity(@RequestBody SubGrupo subGrupo) {
+		SubGrupo subGrupoSaved = subGrupoService.save(subGrupo);
+		return new ResponseEntity<ResponseController>(new ResponseController(subGrupoSaved.getSgrup_id(), "Creado"),
+				HttpStatus.CREATED);
 	}
 
 	/**

@@ -46,8 +46,7 @@ public class GrupoController implements ErrorController {
 	@Qualifier("grupoService")
 	private GrupoService grupoService;
 
-	@Autowired
-	@Qualifier("responseController")
+	@SuppressWarnings("unused")
 	private ResponseController responseController;
 
 	/**
@@ -60,8 +59,8 @@ public class GrupoController implements ErrorController {
 	@ApiOperation(value = "Obtiene todos los registros de la entidad detalle ventas", response = Grupo.class)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> findAll() {
-		List<Grupo> grupo = grupoService.findAll();
-		return ResponseEntity.ok(grupo);
+		List<Grupo> grupos = grupoService.findAll();
+		return ResponseEntity.ok(grupos);
 	}
 
 	/**
@@ -86,10 +85,10 @@ public class GrupoController implements ErrorController {
 	 */
 	@PostMapping(value = "/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> postEntity(@RequestBody Grupo cliente) {
-		Grupo grupoSaved = grupoService.save(cliente);
-		return ResponseEntity.ok(new ResponseController(grupoSaved.getGrup_id(), "Creado"));
+	public ResponseEntity<ResponseController> postEntity(@RequestBody Grupo grupo) {
+		Grupo grupoSaved = grupoService.save(grupo);
+		return new ResponseEntity<ResponseController>(new ResponseController(grupoSaved.getGrup_id(), "Creado"),
+				HttpStatus.CREATED);
 	}
 
 	/**

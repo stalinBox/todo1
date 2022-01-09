@@ -46,8 +46,7 @@ public class DetalleVentaController implements ErrorController {
 	@Qualifier("detalleVentaService")
 	private DetalleVentaService detalleVentaService;
 
-	@Autowired
-	@Qualifier("responseController")
+	@SuppressWarnings("unused")
 	private ResponseController responseController;
 
 	/**
@@ -86,10 +85,10 @@ public class DetalleVentaController implements ErrorController {
 	 */
 	@PostMapping(value = "/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> postEntity(@RequestBody DetalleVenta cliente) {
-		DetalleVenta detaVentasSaved = detalleVentaService.save(cliente);
-		return ResponseEntity.ok(new ResponseController(detaVentasSaved.getDetv_id(), "Creado"));
+	public ResponseEntity<ResponseController> postEntity(@RequestBody DetalleVenta detaVenta) {
+		DetalleVenta detaVentaSaved = detalleVentaService.save(detaVenta);
+		return new ResponseEntity<ResponseController>(new ResponseController(detaVentaSaved.getDetv_id(), "Creado"),
+				HttpStatus.CREATED);
 	}
 
 	/**

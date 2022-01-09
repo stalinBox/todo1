@@ -46,8 +46,7 @@ public class ProveedorController implements ErrorController {
 	@Qualifier("proveedorService")
 	private ProveedorService proveedorService;
 
-	@Autowired
-	@Qualifier("responseController")
+	@SuppressWarnings("unused")
 	private ResponseController responseController;
 
 	/**
@@ -86,10 +85,10 @@ public class ProveedorController implements ErrorController {
 	 */
 	@PostMapping(value = "/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
-	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<ResponseController> postEntity(@RequestBody Proveedor proveedor) {
 		Proveedor proveedorSaved = proveedorService.save(proveedor);
-		return ResponseEntity.ok(new ResponseController(proveedorSaved.getProve_id(), "Creado"));
+		return new ResponseEntity<ResponseController>(new ResponseController(proveedorSaved.getProve_id(), "Creado"),
+				HttpStatus.CREATED);
 	}
 
 	/**

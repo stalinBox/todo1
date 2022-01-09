@@ -46,8 +46,7 @@ public class CompraController implements ErrorController {
 	@Qualifier("compraService")
 	private CompraService compraService;
 
-	@Autowired
-	@Qualifier("responseController")
+	@SuppressWarnings("unused")
 	private ResponseController responseController;
 
 	/**
@@ -57,7 +56,7 @@ public class CompraController implements ErrorController {
 	 * @return Entidad: Retorna todos los registros.
 	 */
 	@GetMapping(value = "/")
-	@ApiOperation(value = "Obtiene todos los registros de la entidad cliente", response = Compra.class)
+	@ApiOperation(value = "Obtiene todos los registros de la entidad compra", response = Compra.class)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> findAll() {
 		List<Compra> compras = compraService.findAll();
@@ -86,10 +85,10 @@ public class CompraController implements ErrorController {
 	 */
 	@PostMapping(value = "/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> postEntity(@RequestBody Compra cliente) {
-		Compra clienteSaved = compraService.save(cliente);
-		return ResponseEntity.ok(new ResponseController(clienteSaved.getComp_id(), "Creado"));
+	public ResponseEntity<ResponseController> postEntity(@RequestBody Compra compra) {
+		Compra compraSaved = compraService.save(compra);
+		return new ResponseEntity<ResponseController>(new ResponseController(compraSaved.getComp_id(), "Creado"),
+				HttpStatus.CREATED);
 	}
 
 	/**
@@ -104,8 +103,8 @@ public class CompraController implements ErrorController {
 	@ApiOperation(value = "Actualizar los registros", response = ResponseController.class)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<ResponseController> update(@RequestBody Compra update) {
-		Compra clienteUpdated = compraService.update(update);
-		return ResponseEntity.ok(new ResponseController(clienteUpdated.getComp_id(), "Actualizado"));
+		Compra compraUpdated = compraService.update(update);
+		return ResponseEntity.ok(new ResponseController(compraUpdated.getComp_id(), "Actualizado"));
 	}
 
 	/**

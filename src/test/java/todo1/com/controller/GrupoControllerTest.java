@@ -31,7 +31,7 @@ import todo1.com.domain.Cliente;
 import todo1.com.services.ClienteService;
 
 @WebMvcTest(ClienteController.class)
-class ClienteControllerTest {
+class GrupoControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;

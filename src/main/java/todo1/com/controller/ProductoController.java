@@ -46,8 +46,7 @@ public class ProductoController implements ErrorController {
 	@Qualifier("productoService")
 	private ProductoService productoService;
 
-	@Autowired
-	@Qualifier("responseController")
+	@SuppressWarnings("unused")
 	private ResponseController responseController;
 
 	/**
@@ -86,10 +85,10 @@ public class ProductoController implements ErrorController {
 	 */
 	@PostMapping(value = "/")
 	@ApiOperation(value = "Crear nuevo registro", response = ResponseController.class)
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<ResponseController> postEntity(@RequestBody Producto cliente) {
-		Producto productoSaved = productoService.save(cliente);
-		return ResponseEntity.ok(new ResponseController(productoSaved.getProd_id(), "Creado"));
+	public ResponseEntity<ResponseController> postEntity(@RequestBody Producto producto) {
+		Producto productoSaved = productoService.save(producto);
+		return new ResponseEntity<ResponseController>(new ResponseController(productoSaved.getProd_id(), "Creado"),
+				HttpStatus.CREATED);
 	}
 
 	/**
