@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,10 +28,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import todo1.com.domain.Cliente;
-import todo1.com.services.ClienteService;
+import todo1.com.domain.Grupo;
+import todo1.com.services.GrupoService;
 
-@WebMvcTest(ClienteController.class)
+@WebMvcTest(GrupoController.class)
 class GrupoControllerTest {
 
 	@Autowired
@@ -40,66 +41,65 @@ class GrupoControllerTest {
 	private ObjectMapper objectMapper;
 
 	@Autowired
-	@Qualifier("clienteService")
+	@Qualifier("grupoService")
 	@MockBean
-	private ClienteService clienteService;
+	private GrupoService grupoService;
 
 	@Test
 	public void testFindAll() throws Exception {
-		List<Cliente> listCliente = new ArrayList<>();
-		listCliente.add(new Cliente(1L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null));
-		listCliente.add(new Cliente(2L, "cliente2", "apellido2", "Direccion2", "0998525877", null, null, null));
-		listCliente.add(new Cliente(3L, "cliente3", "apellido3", "Direccion3", "0998525877", null, null, null));
-		Mockito.when(clienteService.findAll()).thenReturn(listCliente);
-		String url = "/cliente/";
+		List<Grupo> listGrupo = new ArrayList<>();
+		listGrupo.add(new Grupo(1L, "NombreGrupo1", true, new Date(), null));
+		listGrupo.add(new Grupo(2L, "NombreGrupo2", true, new Date(), null));
+		listGrupo.add(new Grupo(3L, "NombreGrupo3", true, new Date(), null));
+		Mockito.when(grupoService.findAll()).thenReturn(listGrupo);
+		String url = "/grupo/";
 		MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 		String actualJsonResponse = mvcResult.getResponse().getContentAsString();
-		String expectedJsonResponse = objectMapper.writeValueAsString(listCliente);
+		String expectedJsonResponse = objectMapper.writeValueAsString(listGrupo);
 		assertThat(actualJsonResponse).isEqualToIgnoringWhitespace(expectedJsonResponse);
 	}
 
 	@Test
 	void testPostEntity() throws JsonProcessingException, Exception {
-		Cliente newCliente = new Cliente(101L, "cliente1", "apellido1", "Direccion1", "0998525877", true, null, null);
-		Cliente savedCliente = new Cliente(101L, "cliente1", "apellido1", "Direccion1", "0998525877", true, null, null);
-		Mockito.when(clienteService.save(newCliente)).thenReturn(savedCliente);
-		String url = "/cliente/";
-		mockMvc.perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(newCliente))
+		Grupo newGrupo = new Grupo(1L, "NombreGrupo1", true, new Date(), null);
+		Grupo savedGrupo = new Grupo(1L, "NombreGrupo1", true, new Date(), null);
+		Mockito.when(grupoService.save(newGrupo)).thenReturn(savedGrupo);
+		String url = "/grupo/";
+		mockMvc.perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(newGrupo))
 				.with(csrf())).andExpect(status().isCreated())
-				.andExpect(content().string("{\"id\":" + 101L + ",\"estado\":\"Creado\"}"));
+				.andExpect(content().string("{\"id\":" + 1L + ",\"estado\":\"Creado\"}"));
 	}
 
 	@Test
 	void testFindById() throws Exception {
-		Long clienteId = 1L;
-		Optional<Cliente> findCliente = Optional
-				.of(new Cliente(1L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null));
-		Mockito.when(clienteService.findById(clienteId)).thenReturn(findCliente);
-		String url = "/cliente/" + clienteId;
+		Long grupoId = 1L;
+		Optional<Grupo> findGrupo = Optional.of(new Grupo(1L, "NombreGrupo1", true, new Date(), null));
+		Mockito.when(grupoService.findById(grupoId)).thenReturn(findGrupo);
+		String url = "/grupo/" + grupoId;
 		MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 		String actualJsonResponse = mvcResult.getResponse().getContentAsString();
-		String expectedJsonResponse = objectMapper.writeValueAsString(findCliente);
+		String expectedJsonResponse = objectMapper.writeValueAsString(findGrupo);
 		assertThat(actualJsonResponse).isEqualToIgnoringWhitespace(expectedJsonResponse);
 	}
 
 	@Test
 	void testUpdate() throws Exception {
-		Cliente exitCliente = new Cliente(122L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null);
-		Cliente updateCliente = new Cliente(122L, "clienxx", "apel", "Direc", "099852", null, null, null);
-		Mockito.when(clienteService.update(exitCliente)).thenReturn(updateCliente);
-		String url = "/cliente/";
-		mockMvc.perform(put(url).contentType("application/json").content(objectMapper.writeValueAsString(exitCliente))
+		Grupo exitGrupo = new Grupo(1L, "NombreGrupo1", true, new Date(), null);
+		Grupo updateGrupo = new Grupo(1L, "NombreGrupo333", true, new Date(), null);
+		Mockito.when(grupoService.update(exitGrupo)).thenReturn(updateGrupo);
+		String url = "/grupo/";
+		mockMvc.perform(put(url).contentType("application/json").content(objectMapper.writeValueAsString(exitGrupo))
 				.with(csrf())).andExpect(status().isOk())
-				.andExpect(content().string("{\"id\":" + 122L + ",\"estado\":\"Actualizado\"}")).andDo(print());
+				.andExpect(content().string("{\"id\":" + 1L + ",\"estado\":\"Actualizado\"}")).andDo(print());
 	}
 
 	@Test
 	void testDelete() throws Exception {
-		Integer clienteId = 1;
-		Mockito.doNothing().when(clienteService).delete((long) clienteId);
-		String url = "/cliente/" + clienteId;
+		Integer grupoId = 1;
+		Mockito.doNothing().when(grupoService).delete((long) grupoId);
+		String url = "/grupo/" + grupoId;
 		mockMvc.perform(delete(url)).andExpect(status().isOk());
-		Mockito.verify(clienteService, times(1)).delete((long) clienteId);
+		Mockito.verify(grupoService, times(1)).delete((long) grupoId);
 	}
 
 }

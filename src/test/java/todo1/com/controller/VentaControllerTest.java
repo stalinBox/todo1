@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +29,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import todo1.com.domain.Cliente;
-import todo1.com.services.ClienteService;
+import todo1.com.domain.Venta;
+import todo1.com.services.VentaService;
 
-@WebMvcTest(ClienteController.class)
+@WebMvcTest(VentaController.class)
 class VentaControllerTest {
 
 	@Autowired
@@ -40,42 +42,47 @@ class VentaControllerTest {
 	private ObjectMapper objectMapper;
 
 	@Autowired
-	@Qualifier("clienteService")
+	@Qualifier("ventaService")
 	@MockBean
-	private ClienteService clienteService;
+	private VentaService ventaService;
 
 	@Test
 	public void testFindAll() throws Exception {
-		List<Cliente> listCliente = new ArrayList<>();
-		listCliente.add(new Cliente(1L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null));
-		listCliente.add(new Cliente(2L, "cliente2", "apellido2", "Direccion2", "0998525877", null, null, null));
-		listCliente.add(new Cliente(3L, "cliente3", "apellido3", "Direccion3", "0998525877", null, null, null));
-		Mockito.when(clienteService.findAll()).thenReturn(listCliente);
-		String url = "/cliente/";
+		Cliente venta = new Cliente();
+		venta.setCli_id(1L);
+		List<Venta> listVenta = new ArrayList<>();
+		listVenta.add(new Venta(1L, new Date(), true, new Date(), venta, null));
+		listVenta.add(new Venta(2L, new Date(), true, new Date(), venta, null));
+		listVenta.add(new Venta(3L, new Date(), true, new Date(), venta, null));
+		Mockito.when(ventaService.findAll()).thenReturn(listVenta);
+		String url = "/venta/";
 		MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 		String actualJsonResponse = mvcResult.getResponse().getContentAsString();
-		String expectedJsonResponse = objectMapper.writeValueAsString(listCliente);
+		String expectedJsonResponse = objectMapper.writeValueAsString(listVenta);
 		assertThat(actualJsonResponse).isEqualToIgnoringWhitespace(expectedJsonResponse);
 	}
 
 	@Test
 	void testPostEntity() throws JsonProcessingException, Exception {
-		Cliente newCliente = new Cliente(101L, "cliente1", "apellido1", "Direccion1", "0998525877", true, null, null);
-		Cliente savedCliente = new Cliente(101L, "cliente1", "apellido1", "Direccion1", "0998525877", true, null, null);
-		Mockito.when(clienteService.save(newCliente)).thenReturn(savedCliente);
-		String url = "/cliente/";
-		mockMvc.perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(newCliente))
+		Cliente venta = new Cliente();
+		venta.setCli_id(1L);
+		Venta newVenta = new Venta(1L, new Date(), true, new Date(), venta, null);
+		Venta savedVenta = new Venta(1L, new Date(), true, new Date(), venta, null);
+		Mockito.when(ventaService.save(newVenta)).thenReturn(savedVenta);
+		String url = "/venta/";
+		mockMvc.perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(newVenta))
 				.with(csrf())).andExpect(status().isCreated())
-				.andExpect(content().string("{\"id\":" + 101L + ",\"estado\":\"Creado\"}"));
+				.andExpect(content().string("{\"id\":" + 1L + ",\"estado\":\"Creado\"}"));
 	}
 
 	@Test
 	void testFindById() throws Exception {
-		Long clienteId = 1L;
-		Optional<Cliente> findCliente = Optional
-				.of(new Cliente(1L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null));
-		Mockito.when(clienteService.findById(clienteId)).thenReturn(findCliente);
-		String url = "/cliente/" + clienteId;
+		Cliente venta = new Cliente();
+		venta.setCli_id(1L);
+		Long ventaId = 1L;
+		Optional<Venta> findCliente = Optional.of(new Venta(1L, new Date(), true, new Date(), venta, null));
+		Mockito.when(ventaService.findById(ventaId)).thenReturn(findCliente);
+		String url = "/venta/" + ventaId;
 		MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 		String actualJsonResponse = mvcResult.getResponse().getContentAsString();
 		String expectedJsonResponse = objectMapper.writeValueAsString(findCliente);
@@ -84,22 +91,24 @@ class VentaControllerTest {
 
 	@Test
 	void testUpdate() throws Exception {
-		Cliente exitCliente = new Cliente(122L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null);
-		Cliente updateCliente = new Cliente(122L, "clienxx", "apel", "Direc", "099852", null, null, null);
-		Mockito.when(clienteService.update(exitCliente)).thenReturn(updateCliente);
-		String url = "/cliente/";
-		mockMvc.perform(put(url).contentType("application/json").content(objectMapper.writeValueAsString(exitCliente))
+		Cliente venta = new Cliente();
+		venta.setCli_id(1L);
+		Venta exitsVenta = new Venta(1L, new Date(), true, new Date(), venta, null);
+		Venta updateVenta = new Venta(1L, new Date(), true, new Date(), venta, null);
+		Mockito.when(ventaService.update(exitsVenta)).thenReturn(updateVenta);
+		String url = "/venta/";
+		mockMvc.perform(put(url).contentType("application/json").content(objectMapper.writeValueAsString(exitsVenta))
 				.with(csrf())).andExpect(status().isOk())
-				.andExpect(content().string("{\"id\":" + 122L + ",\"estado\":\"Actualizado\"}")).andDo(print());
+				.andExpect(content().string("{\"id\":" + 1L + ",\"estado\":\"Actualizado\"}")).andDo(print());
 	}
 
 	@Test
 	void testDelete() throws Exception {
-		Integer clienteId = 1;
-		Mockito.doNothing().when(clienteService).delete((long) clienteId);
-		String url = "/cliente/" + clienteId;
+		Integer ventaId = 1;
+		Mockito.doNothing().when(ventaService).delete((long) ventaId);
+		String url = "/venta/" + ventaId;
 		mockMvc.perform(delete(url)).andExpect(status().isOk());
-		Mockito.verify(clienteService, times(1)).delete((long) clienteId);
+		Mockito.verify(ventaService, times(1)).delete((long) ventaId);
 	}
 
 }

@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,10 +28,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import todo1.com.domain.Cliente;
-import todo1.com.services.ClienteService;
+import todo1.com.domain.Proveedor;
+import todo1.com.services.ProveedorService;
 
-@WebMvcTest(ClienteController.class)
+@WebMvcTest(ProveedorController.class)
 class ProveedorControllerTest {
 
 	@Autowired
@@ -40,42 +41,42 @@ class ProveedorControllerTest {
 	private ObjectMapper objectMapper;
 
 	@Autowired
-	@Qualifier("clienteService")
+	@Qualifier("proveedorService")
 	@MockBean
-	private ClienteService clienteService;
+	private ProveedorService proveedorService;
 
 	@Test
 	public void testFindAll() throws Exception {
-		List<Cliente> listCliente = new ArrayList<>();
-		listCliente.add(new Cliente(1L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null));
-		listCliente.add(new Cliente(2L, "cliente2", "apellido2", "Direccion2", "0998525877", null, null, null));
-		listCliente.add(new Cliente(3L, "cliente3", "apellido3", "Direccion3", "0998525877", null, null, null));
-		Mockito.when(clienteService.findAll()).thenReturn(listCliente);
-		String url = "/cliente/";
+		List<Proveedor> listProveedor = new ArrayList<>();
+		listProveedor.add(new Proveedor(1L, "proveedor1", "direccion1", "0998302415", true, new Date(), null));
+		listProveedor.add(new Proveedor(2L, "proveedor1", "direccion1", "0998302415", true, new Date(), null));
+		listProveedor.add(new Proveedor(3L, "proveedor1", "direccion1", "0998302415", true, new Date(), null));
+		Mockito.when(proveedorService.findAll()).thenReturn(listProveedor);
+		String url = "/proveedor/";
 		MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 		String actualJsonResponse = mvcResult.getResponse().getContentAsString();
-		String expectedJsonResponse = objectMapper.writeValueAsString(listCliente);
+		String expectedJsonResponse = objectMapper.writeValueAsString(listProveedor);
 		assertThat(actualJsonResponse).isEqualToIgnoringWhitespace(expectedJsonResponse);
 	}
 
 	@Test
 	void testPostEntity() throws JsonProcessingException, Exception {
-		Cliente newCliente = new Cliente(101L, "cliente1", "apellido1", "Direccion1", "0998525877", true, null, null);
-		Cliente savedCliente = new Cliente(101L, "cliente1", "apellido1", "Direccion1", "0998525877", true, null, null);
-		Mockito.when(clienteService.save(newCliente)).thenReturn(savedCliente);
-		String url = "/cliente/";
-		mockMvc.perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(newCliente))
+		Proveedor newProveedor = new Proveedor(1L, "proveedor1", "direccion1", "0998302415", true, new Date(), null);
+		Proveedor savedProveedor = new Proveedor(1L, "proveedor1", "direccion1", "0998302415", true, new Date(), null);
+		Mockito.when(proveedorService.save(newProveedor)).thenReturn(savedProveedor);
+		String url = "/proveedor/";
+		mockMvc.perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(newProveedor))
 				.with(csrf())).andExpect(status().isCreated())
-				.andExpect(content().string("{\"id\":" + 101L + ",\"estado\":\"Creado\"}"));
+				.andExpect(content().string("{\"id\":" + 1L + ",\"estado\":\"Creado\"}"));
 	}
 
 	@Test
 	void testFindById() throws Exception {
-		Long clienteId = 1L;
-		Optional<Cliente> findCliente = Optional
-				.of(new Cliente(1L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null));
-		Mockito.when(clienteService.findById(clienteId)).thenReturn(findCliente);
-		String url = "/cliente/" + clienteId;
+		Long proveedorId = 1L;
+		Optional<Proveedor> findCliente = Optional
+				.of(new Proveedor(1L, "proveedor1", "direccion1", "0998302415", true, new Date(), null));
+		Mockito.when(proveedorService.findById(proveedorId)).thenReturn(findCliente);
+		String url = "/proveedor/" + proveedorId;
 		MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 		String actualJsonResponse = mvcResult.getResponse().getContentAsString();
 		String expectedJsonResponse = objectMapper.writeValueAsString(findCliente);
@@ -84,22 +85,22 @@ class ProveedorControllerTest {
 
 	@Test
 	void testUpdate() throws Exception {
-		Cliente exitCliente = new Cliente(122L, "cliente1", "apellido1", "Direccion1", "0998525877", null, null, null);
-		Cliente updateCliente = new Cliente(122L, "clienxx", "apel", "Direc", "099852", null, null, null);
-		Mockito.when(clienteService.update(exitCliente)).thenReturn(updateCliente);
-		String url = "/cliente/";
-		mockMvc.perform(put(url).contentType("application/json").content(objectMapper.writeValueAsString(exitCliente))
+		Proveedor exitProveedor = new Proveedor(1L, "proveedor1", "direccion1", "0998302415", true, new Date(), null);
+		Proveedor updateProveedor = new Proveedor(1L, "proveedor1", "direccion1", "0998302415", true, new Date(), null);
+		Mockito.when(proveedorService.update(exitProveedor)).thenReturn(updateProveedor);
+		String url = "/proveedor/";
+		mockMvc.perform(put(url).contentType("application/json").content(objectMapper.writeValueAsString(exitProveedor))
 				.with(csrf())).andExpect(status().isOk())
-				.andExpect(content().string("{\"id\":" + 122L + ",\"estado\":\"Actualizado\"}")).andDo(print());
+				.andExpect(content().string("{\"id\":" + 1L + ",\"estado\":\"Actualizado\"}")).andDo(print());
 	}
 
 	@Test
 	void testDelete() throws Exception {
-		Integer clienteId = 1;
-		Mockito.doNothing().when(clienteService).delete((long) clienteId);
-		String url = "/cliente/" + clienteId;
+		Integer proveedorId = 1;
+		Mockito.doNothing().when(proveedorService).delete((long) proveedorId);
+		String url = "/proveedor/" + proveedorId;
 		mockMvc.perform(delete(url)).andExpect(status().isOk());
-		Mockito.verify(clienteService, times(1)).delete((long) clienteId);
+		Mockito.verify(proveedorService, times(1)).delete((long) proveedorId);
 	}
 
 }
